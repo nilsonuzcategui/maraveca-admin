@@ -1,0 +1,84 @@
+<div class="container mt-5 mb-5">
+    <div class="row">
+        
+        <div class="col-md-6">
+            <h3>Planes</h3>
+        </div>
+
+        <div class="col-md-6" style="display: flex;justify-content: flex-end;">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Planes</li>
+              </ol>
+            </nav>
+        </div>
+
+
+        <div class="col-12" *ngIf="loading">
+            <mat-progress-bar mode="buffer"></mat-progress-bar>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field appearance="standard">
+            <mat-label>Buscar</mat-label>
+            <input matInput (keyup)="applyFilter($event)" #input>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6 text-end">
+            <button mat-icon-button (click)="abrirDialogoAgregar()" matTooltip="Agregar Plan">
+              <mat-icon style="color: #1da747;">queue</mat-icon>
+            </button>
+            <button mat-icon-button (click)="abrirDialogoActualizarDolar()" matTooltip="Actualizar Precios">
+                <mat-icon style="color: goldenrod;">monetization_on</mat-icon>
+              </button>
+            <button mat-icon-button (click)="actualizarTabla()" color="primary" matTooltip="Actualizar Tabla" *ngIf="!loading">
+              <mat-icon >loop</mat-icon>
+            </button>
+        </div>
+
+        <div class="col-12">
+            <mat-tab-group>
+                <mat-tab label="Planes y Productos Antiguos">
+
+                  <app-tablas-planes [data]='datosTabla1' [filtrado]="filtratoTexto" (editandoPlan)="eventoEditarPlan()"></app-tablas-planes>
+                  
+                </mat-tab>
+                <mat-tab label="Planes y Productos Nuevos"> 
+                  
+                  <app-tablas-planes [data]='datosTabla2' [filtrado]="filtratoTexto" (editandoPlan)="eventoEditarPlan()"></app-tablas-planes>
+                
+                </mat-tab>
+                <mat-tab label="Planes Exclusivos en Dolares"> 
+                  
+                  <app-tablas-planes [data]='datosTabla3' [filtrado]="filtratoTexto" (editandoPlan)="eventoEditarPlan()"></app-tablas-planes>
+                
+                </mat-tab>
+                <mat-tab label="Planes Solo Dedicados"> 
+                  
+                  <app-tablas-planes [data]='datosTabla4' [filtrado]="filtratoTexto" (editandoPlan)="eventoEditarPlan()"></app-tablas-planes>  
+                  
+                </mat-tab>
+                <mat-tab label="Planes Zulia"> 
+
+                  <app-tablas-planes [data]='datosTabla5' [filtrado]="filtratoTexto" (editandoPlan)="eventoEditarPlan()"></app-tablas-planes>
+
+                </mat-tab>
+                <mat-tab label="Planes Fibra"> 
+
+                  <app-tablas-planes [data]='datosTabla6' [filtrado]="filtratoTexto" (editandoPlan)="eventoEditarPlan()"></app-tablas-planes>
+
+                </mat-tab>
+                <mat-tab label="Megas Contratados">
+
+                  <app-tabla-megas-contratados [data]='datosTabla7' [filtrado]="filtratoTexto" (cambioDeTablaHijo)="cambioDeTablaPadre($event)" (editandoPlan)="eventoEditarPlan()"></app-tabla-megas-contratados>
+
+                </mat-tab>
+              </mat-tab-group>              
+        </div>
+
+
+
+    </div>
+</div>

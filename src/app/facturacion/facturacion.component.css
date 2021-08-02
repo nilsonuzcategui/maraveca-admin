@@ -1,0 +1,24 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+.thead{
+  background-color: #add8e67d;
+}
+
+.mat-row .mat-cell {
+  cursor: pointer;
+}
+
+.mat-row:hover .mat-cell {
+  background-color: rgba(247, 241, 241, 0.671);
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}

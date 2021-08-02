@@ -1,0 +1,143 @@
+<div class="container mt-5 mb-5">
+    <div class="row">
+
+      <div class="col-12 mb-3">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Clientes <span *ngIf="!loading" class="badge bg-secondary" style="font-size: 15px;padding: 5px;">{{numerosClientes}}</span></h3>
+          </div>
+
+          <div class="col-md-6" style="display: flex;justify-content: flex-end;">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Clientes</li>
+              </ol>
+            </nav>
+          </div>
+          
+          <div class="col-12 mb-3" *ngIf="loading">
+            <mat-progress-bar mode="buffer"></mat-progress-bar>
+          </div>
+
+          <div class="col-12 text-end">
+            <button mat-icon-button matTooltip="Agregar Cliente" (click)="abrirDialogoAgregar()">
+              <mat-icon style="color: #1da747;">person_add</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" matTooltip="Actualizar Tabla" (click)="obtenerClientes()" *ngIf="!loading">
+              <mat-icon >loop</mat-icon>
+            </button>
+          </div>
+
+          <div class="col-12">
+            <mat-card>
+
+              <div class="row">
+                
+                <div class="col-md-6">
+                  <p>Filtrado de Clientes</p>
+                  <mat-form-field appearance="standard">
+                    <mat-label>Nombre / Cedula / Telefono / Correo / Direccion</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" #input>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-6 text-end">
+                  <p class="mb-5">Tipo de Cliente</p>
+
+                  <mat-radio-group aria-label="Selecciona una opcion" [(ngModel)]="datos_tabla" >
+                    <mat-radio-button value="1" checked="true" (change)="radioChange($event)">Con Servicio</mat-radio-button>
+                    <mat-radio-button value="2" (change)="radioChange($event)">Sin Servicio</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+
+            </mat-card>
+          </div>
+        </div>
+      </div>
+
+
+        <div class="col-12">
+            
+
+
+
+            
+              
+              <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort>
+              
+                  ID Column
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead"> ID </th>
+                    <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                  </ng-container>
+                 
+              
+                  <ng-container matColumnDef="cedula">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%" class="thead"> <b>CEDULA</b> </th>
+                    <td mat-cell *matCellDef="let row" (click)="clickedRows(row)"> {{row.kind}} {{row.dni}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="cliente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 25%" class="thead"> <b>CLIENTE</b> </th>
+                    <td mat-cell *matCellDef="let row" (click)="clickedRows(row)"> {{row.nombre}} {{row.apellido}}</td>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="telefono">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead" style="width: 10%"> <b>TELÉFONO</b> </th>
+                    <td mat-cell *matCellDef="let row" (click)="clickedRows(row)"> {{row.phone1}} </td>
+                  </ng-container>
+              
+                  <ng-container matColumnDef="correo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead" style="width: 20%"> <b>CORREO</b> </th>
+                    <td mat-cell *matCellDef="let row" (click)="clickedRows(row)"> {{row.email}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="direccion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead"> <b>DIRECCIÓN</b> </th>
+                    <td mat-cell *matCellDef="let row" (click)="clickedRows(row)"> {{row.direccion}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="thead"> </th>
+                    <td mat-cell *matCellDef="let row"> 
+
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="clickedRows(row)">
+                          <mat-icon>edit</mat-icon>
+                          <span>Detalles</span>
+                        </button>
+                        <button mat-menu-item>
+                          <mat-icon>deleted</mat-icon>
+                          <span>Eliminar</span>
+                        </button>
+                      </mat-menu>
+
+                    </td>
+                  </ng-container>
+              
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              
+                  <!-- Row shown when there is no matching data. -->
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No se encontraron datos que coincidan con: <b>{{input.value}}</b></td>
+                  </tr>
+                </table>
+              
+                <mat-paginator [pageSizeOptions]="[10, 50, 100, 200]" showFirstLastButtons></mat-paginator>
+              </div>
+              
+              
+
+
+
+              
+        </div>
+    </div>
+</div>

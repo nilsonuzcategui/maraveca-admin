@@ -1,0 +1,92 @@
+<h5>Agregar Cliente </h5>
+<hr>
+<form class="example-container row" [formGroup]="registerForm" (submit)="submitAgregar()">
+    <div class="col-md-4">
+        <div class="row">
+            <mat-form-field class="col-md-4">
+                <mat-select formControlName="tipo_cedula">
+                  <mat-option value="V" selected>V</mat-option>
+                  <mat-option value="J">J</mat-option>
+                  <mat-option value="E">E</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-8">
+                <mat-label>Cedula *</mat-label>
+                <input matInput formControlName="cedula">
+                <mat-error *ngIf="registerForm">La cedula es requerido</mat-error>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <mat-form-field class="col-md-4">
+      <mat-label>Nombres *</mat-label>
+      <input matInput formControlName="nombre">
+      <mat-error *ngIf="registerForm">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Apellidos *</mat-label>
+        <input matInput formControlName="apellido">
+        <mat-error *ngIf="registerForm">El apellido es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Fecha Nacimiento</mat-label>
+        <input type="date" matInput formControlName="fecha_nacimiento">
+    </mat-form-field>
+      
+    <mat-form-field class="col-md-4">
+        <mat-label>Telefono</mat-label>
+        <input matInput formControlName="telefono">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Correo *</mat-label>
+        <input matInput formControlName="correo">
+        <mat-error *ngIf="registerForm">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Estado *</mat-label>
+        <mat-select formControlName="idestado" (selectionChange)="cambiandoEstado($event)">
+          <mat-option *ngFor="let e of estados" [value]="e['id_estado']">{{e['estado']}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm">El estado es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Municipio *</mat-label>
+        <mat-select formControlName="idmunicipio" (selectionChange)="cambiandoMunicipio($event)">
+          <mat-option *ngFor="let m of municipios" [value]="m['id_municipio']">{{m['municipio']}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm">El municipio es requerido</mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Parroquia *</mat-label>
+        <mat-select formControlName="idparroquia">
+          <mat-option *ngFor="let p of parroquia" [value]="p['id_parroquia']">{{p['parroquia']}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm">La parroquia es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-12">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="direccion">
+    </mat-form-field>
+
+
+
+    <div class="col-12" *ngIf="loading">
+        <mat-progress-bar mode="buffer"></mat-progress-bar>
+    </div>
+
+    <div class="col-12 text-center" *ngIf="!loading">
+        <button mat-raised-button type="button" (click)="ngOnDestroy()" class="me-3">Cancelar</button>
+        <button mat-raised-button [disabled]="registerForm.invalid" color="primary" type="submit">Guardar</button>
+    </div>
+      
+</form>

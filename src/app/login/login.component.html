@@ -1,0 +1,28 @@
+<div class="body">
+  <main class="form-signin mt-5">
+    <form (ngSubmit)="onSubmit()">
+      <div class="text-center">
+        <img class="mb-4" src="/assets/logo.PNG" alt="Logo Maraveca" style="width: 300px;">
+      </div>
+      <hr>
+      <h3 class="h4 mb-3 fw-normal text-center" style="font-weight: 500 !important;">Gestión Administrativa</h3>
+  
+      <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Usuario" [(ngModel)]="login.username" name="nombre">
+        <label for="floatingInput" style="color: #8d9092;">Usuario</label>
+      </div>
+      <div class="form-floating">
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Contraseña" [(ngModel)]="login.password" name="password">
+        <label for="floatingPassword" style="color: #8d9092;">Contraseña</label>
+      </div>
+  
+      <div *ngIf="error" class="alert alert-danger" role="alert">
+        {{ errorMensaje }}
+      </div>
+
+      <mat-progress-bar *ngIf="loading" mode="buffer" class="mt-3" style="margin-top: 30px !important;"></mat-progress-bar>
+
+      <button *ngIf="!loading" class="w-100 btn btn-lg btn-primary" type="submit">Ingresar</button>
+    </form>
+  </main>
+</div>

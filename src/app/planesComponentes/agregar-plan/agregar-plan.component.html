@@ -1,0 +1,63 @@
+<h4>Agregar nuevo plan</h4>
+
+<form class="example-container row" [formGroup]="registerForm" (submit)="submitAgregar()">
+    <mat-form-field class="col-md-6">
+        <mat-label>Tipo de servicio *</mat-label>
+        <mat-select formControlName="tipo_plan" (selectionChange)="cambiandoTipoServicio($event)">
+          <mat-option value="1">Planes antiguos</mat-option>
+          <mat-option value="4">Planes nuevos</mat-option>
+          <mat-option value="3">Planes exclusivos en dolares</mat-option>
+          <mat-option value="5">Planes Solo Dedicados</mat-option>
+          <mat-option value="6">Planes Zulia</mat-option>
+          <mat-option value="7">Planes Fibra</mat-option>
+          <mat-option value="2">Otros</mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm">El municipio es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+      <mat-label>Nombres *</mat-label>
+      <input matInput formControlName="name_plan">
+      <mat-error *ngIf="registerForm">El nombre es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6" *ngIf="inputCosto">
+        <mat-label>Costo *</mat-label>
+        <input matInput formControlName="cost_plan" type="number" min="0">
+        <mat-error *ngIf="registerForm">El costo es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6" [ngClass]="{'col-md-12': !inputCosto }">
+        <mat-label>Costo Dolar $ *</mat-label>
+        <input matInput formControlName="taza" type="number" min="0">
+        <mat-error *ngIf="registerForm">El costo en dolares es requerido</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+        <mat-label>Mb de Descarga</mat-label>
+        <input matInput formControlName="dmb_plan" type="number" min="0">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+        <mat-label>Mb de Subida</mat-label>
+        <input matInput formControlName="umb_plan" type="number" min="0">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-12">
+        <mat-label>Caracteristicas del servicio</mat-label>
+        <mat-select formControlName="carac_plan">
+          <mat-option value="1">Asimetrico</mat-option>
+          <mat-option value="2">Simetrico</mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm">El municipio es requerido</mat-error>
+    </mat-form-field>
+
+    <div class="col-12 mb-3" *ngIf="loading">
+        <mat-progress-bar mode="buffer"></mat-progress-bar>
+    </div>
+
+    <div class="col-12 text-center">
+        <button mat-raised-button class="me-2" type="button" (click)="cerrarDialogo()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid">Guardar</button>
+    </div>
+</form>

@@ -1,0 +1,47 @@
+<app-header (eventoToggle)="ToogleMenu()" *ngIf="isHeader"></app-header>
+
+<mat-sidenav-container
+    class="example-container" (backdropClick)="close('backdrop')" *ngIf="shouldRun">
+    <mat-sidenav class="example-sidenav" #sidenav (keydown.escape)="close('escape')" disableClose>
+        <div class="text-center mt-4 mb-4">
+            <img src="assets/logo.PNG" alt="logo maraveca" style="width: 70%;cursor: pointer;" routerLink="/" (click)="ToogleMenu()">
+        </div>
+        <mat-selection-list #shoes [multiple]="false">
+            <mat-list-option *ngIf="permisoCliente" routerLink="/clientes" (click)="ToogleMenu()">
+              Clientes
+            </mat-list-option>
+            <mat-list-option routerLink="/facturacion" (click)="ToogleMenu()">
+                Facturación
+              </mat-list-option>
+              <mat-list-option>
+                Promociones
+              </mat-list-option>
+              <mat-list-option>
+                Carga de Pagos Masiva
+              </mat-list-option>
+              <mat-list-option>
+                Pago de Instalaciones
+              </mat-list-option>
+              <mat-list-option>
+                Inventario
+              </mat-list-option>
+              <mat-list-option *ngIf="permisoPlanes" routerLink="/planes" (click)="ToogleMenu()">
+                Planes
+              </mat-list-option>
+              <mat-list-option>
+                Servicios
+              </mat-list-option>
+              <mat-list-option>
+                Mis Comisiones
+              </mat-list-option>
+              <mat-list-option>
+                Pagos de Clientes
+              </mat-list-option>
+              
+          </mat-selection-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content style="min-height: 700px;">
+        <router-outlet (eventoIniciaSesion)="IniciaSesionEvent()"></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>
