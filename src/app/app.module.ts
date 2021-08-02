@@ -25,6 +25,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs, 'es');
@@ -94,7 +95,8 @@ import { FacturacionGetDeudaPipe } from './pipes/facturacion-get-deuda.pipe';
     MatRadioModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatTabsModule
+    MatTabsModule,
+    MatExpansionModule
   ],
   providers: [ { provide: LOCALE_ID, useValue: 'es' } ],
   bootstrap: [AppComponent]

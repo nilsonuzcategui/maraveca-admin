@@ -53,4 +53,8 @@ export class ClientesService {
   traerDatosCliente(id: number){
     return this.http.get(this.loginS.API_URI+"cliente/"+id);
   }
+
+  obtenerServiciosClientes(idCliente: number){
+    return this.http.get(this.loginS.API_URI+'clientover/'+idCliente);
+  }
 }

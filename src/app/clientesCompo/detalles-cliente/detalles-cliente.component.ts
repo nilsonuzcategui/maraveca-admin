@@ -1,21 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientesService } from 'src/app/_servicios/clientes.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { FormBuilder, Validators } from '@angular/forms';
-
+import {MatAccordion} from '@angular/material/expansion';
+import {MatPaginator} from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-detalles-cliente',
   templateUrl: './detalles-cliente.component.html',
   styleUrls: ['./detalles-cliente.component.css']
 })
-export class DetallesClienteComponent implements OnInit {
+export class DetallesClienteComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatAccordion) accordion: MatAccordion | any;
+  columnasServicios: string[] = ['id', 'name_plan', 'direccion'];
+  @ViewChild(MatPaginator) paginator: MatPaginator | any;
+
+  columnasHistorial: string[] = ['history', 'modulo', 'nombre_user', 'created_at'];
 
   //VARIABLES PARA DATOS PERSONALES
-  idusuario: any = this._route.snapshot.paramMap.get('id');
+  idcliente: any = this._route.snapshot.paramMap.get('id');
   registerForm = this.formBuilder.group({
-    userid: [{value: this.idusuario, disabled: true}, Validators.required],
+    userid: [{value: this.idcliente, disabled: true}, Validators.required],
     tipo_cedula: [{value: 'V', disabled: true}, Validators.required],
     cedula: [{value: '', disabled: true}, Validators.required],
     nombre: [{value: '', disabled: true}, Validators.required],
@@ -34,6 +41,10 @@ export class DetallesClienteComponent implements OnInit {
   //VARIABLES PARA DINAMISCO
   loading: boolean = true;
 
+  //VARIABLES PARA EL CONTENIDO
+  servicios: MatTableDataSource<any> = <any>[];
+  historial: MatTableDataSource<any> = <any>[];
+
   constructor(
     private _route: ActivatedRoute,
     private _clientes: ClientesService,
@@ -42,14 +53,14 @@ export class DetallesClienteComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._clientes.traerDatosCliente(this.idusuario).subscribe(
+    this._clientes.traerDatosCliente(this.idcliente).subscribe(
       (res: any) => {
         if (res.length > 0) {
           let datos = res[0]
           console.log(datos);
           //Seteo de variables
           this.registerForm = this.formBuilder.group({
-            userid: [{value: this.idusuario, disabled: true}, Validators.required],
+            userid: [{value: this.idcliente, disabled: true}, Validators.required],
             tipo_cedula: [{value: datos['kind'], disabled: true}, Validators.required],
             cedula: [{value: datos['dni'], disabled: true}, Validators.required],
             nombre: [{value: datos['nombre'], disabled: true}, Validators.required],
@@ -73,6 +84,27 @@ export class DetallesClienteComponent implements OnInit {
       },(err: any) => {
         console.log(err);
         this.loading = false;
+      }
+    );
+
+    this.obtenerServiciosClientes();
+  }
+
+  ngAfterViewInit() {
+    console.log('ngaferviweninit por aqui');
+    this.servicios.paginator = this.paginator;
+  }
+
+  obtenerServiciosClientes(){
+    this._clientes.obtenerServiciosClientes(this.idcliente).subscribe(
+      (res: any) =>{
+        console.log(res);
+        this.servicios = res['servicios'];
+        this.historial = res['history'];
+        this.ngAfterViewInit();
+      },(err: any) => {
+        console.log(err);
+        this._snackBar.open('Error al obtener datos de los servicios', 'ok',{duration: 5000});
       }
     );
   }

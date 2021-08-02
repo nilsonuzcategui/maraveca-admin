@@ -173,6 +173,10 @@ export class FacturacionComponent implements OnInit {
   radioChange($event: MatRadioChange) {
     this.fechafiltrofactura = $event.value;
     this.estadofactura = '';
+    this.arrayDatos = [];
+    this.dataSource = new MatTableDataSource<FacturacionInterfaz>(this.arrayDatos);
+    this.dataSource._updateChangeSubscription();
+    this.ngAfterViewInit();
     this.obtenerNumerodeFilas();
   }
 
