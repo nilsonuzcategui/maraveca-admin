@@ -91,7 +91,6 @@ export class ClientesComponent implements OnInit, AfterViewInit{
     this.loading = true;
     this._clientes.traerClientesApi(this.userData['id_user'], 1, this.datos_tabla,'mostrar_clientes').subscribe(
       (res : any) => {
-        // console.log(res);
         this.dataSource = new MatTableDataSource<PeriodicElement>(res['cuerpo']);
         this.numerosClientes = res['cuerpo'].length;
         this.ngAfterViewInit();

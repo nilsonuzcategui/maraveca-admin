@@ -16,7 +16,6 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
   @ViewChild(MatAccordion) accordion: MatAccordion | any;
   columnasServicios: string[] = ['id', 'name_plan', 'direccion'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
-
   columnasHistorial: string[] = ['history', 'modulo', 'nombre_user', 'created_at'];
 
   //VARIABLES PARA DATOS PERSONALES
@@ -43,7 +42,8 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
 
   //VARIABLES PARA EL CONTENIDO
   servicios: MatTableDataSource<any> = <any>[];
-  historial: MatTableDataSource<any> = <any>[];
+  historial = new MatTableDataSource<any>();
+  
 
   constructor(
     private _route: ActivatedRoute,
@@ -80,10 +80,9 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
             duration: 4000,
           });
         }
-        this.loading = false;
       },(err: any) => {
         console.log(err);
-        this.loading = false;
+       
       }
     );
 
@@ -92,19 +91,23 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     console.log('ngaferviweninit por aqui');
-    this.servicios.paginator = this.paginator;
+    this.historial.paginator = this.paginator;
   }
 
   obtenerServiciosClientes(){
+    this.loading = true;
     this._clientes.obtenerServiciosClientes(this.idcliente).subscribe(
       (res: any) =>{
         console.log(res);
-        this.servicios = res['servicios'];
-        this.historial = res['history'];
+        this.servicios = new MatTableDataSource<any>(res['servicios']);
+        this.historial = new MatTableDataSource<any>(res['history']);
+        this.historial.paginator = this.paginator;
         this.ngAfterViewInit();
       },(err: any) => {
         console.log(err);
         this._snackBar.open('Error al obtener datos de los servicios', 'ok',{duration: 5000});
+      },() => {
+        this.loading = false;
       }
     );
   }

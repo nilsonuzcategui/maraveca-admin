@@ -1,6 +1,6 @@
 <h3>Actualizar Precios</h3>
 <p class="text-muted" *ngIf="!loading" style="font-size: 12px;">
-    Ultima modificacion: <b>{{ultimaModificacion | date: 'short'}}</b>
+    Ultima modificacion: <b>{{ultimaModificacion | date: 'd/M/yy, h:mm a'}}</b>
 </p>
 <mat-progress-bar *ngIf="loading" mode="buffer" class="mt-2 mb-2"></mat-progress-bar>
 
