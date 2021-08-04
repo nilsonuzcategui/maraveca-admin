@@ -122,7 +122,7 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
 
 
   dataSource = new MatTableDataSource<any>();
-  columnsToDisplay = ['id', 'name_plan', 'direccion'];
+  columnsToDisplay = ['id_srv', 'name_plan', 'direccion'];
   expandedElement: PeriodicElement | any;
 
 
