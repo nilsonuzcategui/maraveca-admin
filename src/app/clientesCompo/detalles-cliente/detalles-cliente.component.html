@@ -96,13 +96,13 @@
             <div class="row">
                 <div class="col-md-4">
                     <mat-card style="background-color: #ad999917;">
-                        <mat-card-subtitle>Status de Balance</mat-card-subtitle>
+                        <mat-card-subtitle>Balance deudor</mat-card-subtitle>
                         <mat-card-title>{{status_balance_html1 | number: "1.2-2"}} {{denominacion_html}}</mat-card-title>
                     </mat-card>
                 </div>
                 <div class="col-md-4">
                     <mat-card style="background-color: #62a2482e;">
-                        <mat-card-subtitle>Status de Balance</mat-card-subtitle>
+                        <mat-card-subtitle>Balance a favor</mat-card-subtitle>
                         <mat-card-title>{{status_balance_html2 | number: "1.2-2"}} {{denominacion_html}}</mat-card-title>
                     </mat-card>
                 </div>
@@ -120,7 +120,7 @@
                 <button mat-button (click)="accordion.closeAll()" style="color: #666;"><mat-icon>visibility_off</mat-icon> Extraer todos</button>
               </div>
               <mat-accordion class="example-headers-align" multi>
-                <mat-expansion-panel expanded style="background-color: #00b3e00d;">
+                <mat-expansion-panel style="background-color: #00b3e00d;">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Servicios
@@ -132,70 +132,7 @@
                   </mat-expansion-panel-header>
               
                   
-                  <table mat-table
-                  [dataSource]="dataSource" multiTemplateDataRows
-                  class="mat-elevation-z8">
-                    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-                      <th mat-header-cell *matHeaderCellDef>
-                        <div *ngIf="column == 'id_srv'"> ID</div>
-                        <div *ngIf="column == 'name_plan'"> Plan</div>
-                        <div *ngIf="column == 'direccion'" class="text-end"> Acciones</div>
-                      </th>
-                      <td mat-cell *matCellDef="let element" class="c-pointer"> 
-                        <div *ngIf="column != 'direccion'"> {{element[column]}}  </div>
-                        <div *ngIf="column == 'direccion'" class="text-end">
-                            <button mat-icon-button>
-                                <mat-icon>mode_edit</mat-icon>
-                            </button>
-                            <button mat-icon-button>
-                                <mat-icon>star</mat-icon>
-                            </button>
-                            <button mat-icon-button>
-                                <mat-icon>rotate_left</mat-icon>
-                            </button>
-                            <button mat-icon-button>
-                                <mat-icon>book_online</mat-icon>
-                            </button>
-                        </div>
-                      </td>
-                    </ng-container>
-           
-                    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-                    <ng-container matColumnDef="expandedDetail">
-                      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-                        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                          
-                          <!-- CONTENIDO -->
-                          <div class="row mt-3">
-                            <div class="col-md-6">
-                              <p><b>IP:</b> {{element['ip_srv']}}</p>
-                            </div>
-                            <div class="col-md-6">
-                              <p><b>AP:</b> {{element['ip_ap']}} - <i>{{element['nombre_ap']}}</i></p>
-                            </div>
-                            <div class="col-md-6">
-                              <p><b>Nombre Equipo:</b> {{element['nombre_equipo']}}</p>
-                            </div>
-                            <div class="col-md-6">
-                              <p><b>Serial Equipo:</b> {{element['serial_srv']}}</p>
-                            </div>
-                            <div class="col-md-6">
-                              <p><b>intensidad de Señal:</b> {{element['signal_srv']}}</p>
-                            </div>
-                          </div>
-                  
-                        </div>
-                      </td>
-                    </ng-container>
-           
-                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
-                        class="example-element-row"
-                        [class.example-expanded-row]="expandedElement === element"
-                        (click)="expandedElement = expandedElement === element ? null : element">
-                    </tr>
-                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-                  </table>
+                  <app-tabla-cliente-servicio [data]='dataSource'></app-tabla-cliente-servicio>
 
                   
                   
@@ -207,7 +144,7 @@
                 </mat-expansion-panel>
                 
               
-                <mat-expansion-panel expanded>
+                <mat-expansion-panel>
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Historial
@@ -263,26 +200,57 @@
                 </mat-expansion-panel>
 
 
-                <mat-expansion-panel expanded style="background-color: #00b3e00d;">
+                <mat-expansion-panel style="background-color: #00b3e00d;">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                      Servicios
+                      Balances de Pagos
                     </mat-panel-title>
                     <mat-panel-description>
-                      Servicios obtenidos en Maraveca
-                      <mat-icon>assignment</mat-icon>
+                      Pagos y Exoneraciones
+                      <mat-icon>monetization_on</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-              
-                  
 
-                  
+                  <mat-tab-group>
+                    <mat-tab label="Pagos"> 
+                      <div class="mat-elevation-z8">
+                        <table mat-table [dataSource]="balancePagosTabla">
+                          <!-- Progress Column -->
+                          <ng-container matColumnDef="id_bal">
+                            <th mat-header-cell *matHeaderCellDef> id_bal </th>
+                            <td mat-cell *matCellDef="let row"> {{row.id_bal}} </td>
+                          </ng-container>
+                      
+                          <!-- Name Column -->
+                          <ng-container matColumnDef="created_at">
+                            <th mat-header-cell *matHeaderCellDef> created_at </th>
+                            <td mat-cell *matCellDef="let row"> {{row.created_at}} </td>
+                          </ng-container>
+                      
+                          <!-- Fruit Column -->
+                          <ng-container matColumnDef="bal_monto">
+                            <th mat-header-cell *matHeaderCellDef> bal_monto </th>
+                            <td mat-cell *matCellDef="let row"> {{row.bal_monto}} </td>
+                          </ng-container>
+    
+                          <ng-container matColumnDef="bal_tip">
+                            <th mat-header-cell *matHeaderCellDef> bal_tip </th>
+                            <td mat-cell *matCellDef="let row"> {{row.bal_tip }} </td>
+                          </ng-container>
 
-                  
-                  
-                  
-
-
+                          <ng-container matColumnDef="bal_stat">
+                            <th mat-header-cell *matHeaderCellDef> bal_stat </th>
+                            <td mat-cell *matCellDef="let row"> {{row.bal_stat }} </td>
+                          </ng-container>
+                      
+                          <tr mat-header-row *matHeaderRowDef="columnasBalancesPagos"></tr>
+                          <tr mat-row *matRowDef="let row; columns: columnasBalancesPagos;"></tr>
+                        </table>
+                      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Exoneraciones"> Content 2 </mat-tab>
+                  </mat-tab-group>
 
               
                 </mat-expansion-panel>

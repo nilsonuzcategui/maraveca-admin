@@ -1,0 +1,65 @@
+<table mat-table
+    [dataSource]="dataSource" multiTemplateDataRows
+    class="mat-elevation-z8">
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+        <th mat-header-cell *matHeaderCellDef>
+            <div *ngIf="column == 'id_srv'"> ID</div>
+            <div *ngIf="column == 'name_plan'"> Plan</div>
+            <div *ngIf="column == 'direccion'" class="text-end"> Acciones</div>
+        </th>
+        <td mat-cell *matCellDef="let element" class="c-pointer"> 
+            <div *ngIf="column != 'direccion'"> {{element[column]}}  </div>
+            <div *ngIf="column == 'direccion'" class="text-end">
+                <button mat-icon-button>
+                    <mat-icon>mode_edit</mat-icon>
+                </button>
+                <button mat-icon-button>
+                    <mat-icon>star</mat-icon>
+                </button>
+                <button mat-icon-button>
+                     <mat-icon>rotate_left</mat-icon>
+                </button>
+                <button mat-icon-button>
+                    <mat-icon>book_online</mat-icon>
+                </button>
+            </div>
+        </td>
+    </ng-container>
+           
+                    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+                      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length" style="background-color: azure;">
+                        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                          
+                          <!-- CONTENIDO -->
+                          <div class="row mt-3">
+                            <div class="col-md-6">
+                              <p><b>IP:</b> {{element['ip_srv']}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><b>AP:</b> {{element['ip_ap']}} - <i>{{element['nombre_ap']}}</i></p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><b>Nombre Equipo:</b> {{element['nombre_equipo']}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><b>Serial Equipo:</b> {{element['serial_srv']}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><b>intensidad de Señal:</b> {{element['signal_srv']}}</p>
+                            </div>
+                          </div>
+                  
+                        </div>
+                      </td>
+                    </ng-container>
+           
+                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+                        class="example-element-row"
+                        [class.example-expanded-row]="expandedElement === element"
+                        (click)="expandedElement = expandedElement === element ? null : element">
+                    </tr>
+                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>

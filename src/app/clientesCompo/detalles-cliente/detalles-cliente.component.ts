@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientesService } from 'src/app/_servicios/clientes.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
@@ -7,123 +7,33 @@ import {MatAccordion} from '@angular/material/expansion';
 import {MatPaginator} from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotaCreditoService } from 'src/app/_servicios/nota-credito.service';
-import {animate, state, style, transition, trigger} from '@angular/animations';
 
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  description: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    position: 1,
-    name: 'Hydrogen',
-    weight: 1.0079,
-    symbol: 'H',
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`
-  }, {
-    position: 2,
-    name: 'Helium',
-    weight: 4.0026,
-    symbol: 'He',
-    description: `Helium is a chemical element with symbol He and atomic number 2. It is a
-        colorless, odorless, tasteless, non-toxic, inert, monatomic gas, the first in the noble gas
-        group in the periodic table. Its boiling point is the lowest among all the elements.`
-  }, {
-    position: 3,
-    name: 'Lithium',
-    weight: 6.941,
-    symbol: 'Li',
-    description: `Lithium is a chemical element with symbol Li and atomic number 3. It is a soft,
-        silvery-white alkali metal. Under standard conditions, it is the lightest metal and the
-        lightest solid element.`
-  }, {
-    position: 4,
-    name: 'Beryllium',
-    weight: 9.0122,
-    symbol: 'Be',
-    description: `Beryllium is a chemical element with symbol Be and atomic number 4. It is a
-        relatively rare element in the universe, usually occurring as a product of the spallation of
-        larger atomic nuclei that have collided with cosmic rays.`
-  }, {
-    position: 5,
-    name: 'Boron',
-    weight: 10.811,
-    symbol: 'B',
-    description: `Boron is a chemical element with symbol B and atomic number 5. Produced entirely
-        by cosmic ray spallation and supernovae and not by stellar nucleosynthesis, it is a
-        low-abundance element in the Solar system and in the Earth's crust.`
-  }, {
-    position: 6,
-    name: 'Carbon',
-    weight: 12.0107,
-    symbol: 'C',
-    description: `Carbon is a chemical element with symbol C and atomic number 6. It is nonmetallic
-        and tetravalent—making four electrons available to form covalent chemical bonds. It belongs
-        to group 14 of the periodic table.`
-  }, {
-    position: 7,
-    name: 'Nitrogen',
-    weight: 14.0067,
-    symbol: 'N',
-    description: `Nitrogen is a chemical element with symbol N and atomic number 7. It was first
-        discovered and isolated by Scottish physician Daniel Rutherford in 1772.`
-  }, {
-    position: 8,
-    name: 'Oxygen',
-    weight: 15.9994,
-    symbol: 'O',
-    description: `Oxygen is a chemical element with symbol O and atomic number 8. It is a member of
-         the chalcogen group on the periodic table, a highly reactive nonmetal, and an oxidizing
-         agent that readily forms oxides with most elements as well as with other compounds.`
-  }, {
-    position: 9,
-    name: 'Fluorine',
-    weight: 18.9984,
-    symbol: 'F',
-    description: `Fluorine is a chemical element with symbol F and atomic number 9. It is the
-        lightest halogen and exists as a highly toxic pale yellow diatomic gas at standard
-        conditions.`
-  }, {
-    position: 10,
-    name: 'Neon',
-    weight: 20.1797,
-    symbol: 'Ne',
-    description: `Neon is a chemical element with symbol Ne and atomic number 10. It is a noble gas.
-        Neon is a colorless, odorless, inert monatomic gas under standard conditions, with about
-        two-thirds the density of air.`
-  },
-];
+import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'app-detalles-cliente',
   templateUrl: './detalles-cliente.component.html',
   styleUrls: ['./detalles-cliente.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
 })
 
-export class DetallesClienteComponent implements OnInit, AfterViewInit {
+export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  peticionHttp: Subscription = new Subscription; //peticion http
+  peticionHttpDatosClientes: Subscription = new Subscription; //peticion http
+
+
   @ViewChild(MatAccordion) accordion: MatAccordion | any;
-  columnasServicios: string[] = ['id', 'name_plan', 'direccion'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
+  @ViewChild(MatPaginator) paginatorBalances: MatPaginator | any;
+  columnasServicios: string[] = ['id', 'name_plan', 'direccion'];
   columnasHistorial: string[] = ['history', 'modulo', 'nombre_user', 'created_at'];
+  columnasBalancesPagos: string[] = ['id_bal', 'created_at', 'bal_monto', 'bal_tip','bal_stat'];
 
 
   dataSource = new MatTableDataSource<any>();
-  columnsToDisplay = ['id_srv', 'name_plan', 'direccion'];
-  expandedElement: PeriodicElement | any;
+  
+  
 
 
   //VARIABLES PARA DATOS PERSONALES
@@ -151,8 +61,9 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
   //VARIABLES PARA EL CONTENIDO
   datosClientes: any;
   servicios: MatTableDataSource<any> = <any>[];
-  numServicios: any;
   historial = new MatTableDataSource<any>();
+  balancePagosTabla = new MatTableDataSource<any>();
+  numServicios: any;
   facturacion: any = [];
   notasCreditos: any = [];
   balance_in: any = [];
@@ -191,7 +102,7 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this._clientes.traerDatosCliente(this.idcliente).subscribe(
+    this.peticionHttpDatosClientes = this._clientes.traerDatosCliente(this.idcliente).subscribe(
       (res: any) => {
         if (res.length > 0) {
           this.datosClientes = res[0]
@@ -215,7 +126,7 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
           });
 
           //mostrar si es facturable o no facturable
-          if(this.datosClientes['social'] == 1){
+          if(this.datosClientes['serie'] == 1){
             this.tipo_cliente_html = 'Facturable';
           }else{
             this.tipo_cliente_html = 'No Facturable';
@@ -235,29 +146,34 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log('ngaferviweninit por aqui');
     this.historial.paginator = this.paginator;
+    this.balancePagosTabla.paginator = this.paginatorBalances;
   }
 
   obtenerServiciosClientes(){
     this.loading = true;
-    this._clientes.obtenerServiciosClientes(this.idcliente).subscribe(
+    this.peticionHttp = this._clientes.obtenerServiciosClientes(this.idcliente).subscribe(
       (res: any) =>{
         console.log(res);
         this.numServicios = res['servicios'].length;
-        this.servicios = new MatTableDataSource<any>(res['servicios']);
+        this.dataSource = new MatTableDataSource<any>(res['servicios']); //tabla principal de servicios
         this.historial = new MatTableDataSource<any>(res['history']);
-
-        this.dataSource = new MatTableDataSource<any>(res['servicios']);
-
-        this.historial.paginator = this.paginator;
-        this.ngAfterViewInit();
+        
         //facturacion para pagos y facturas
         this.facturacion = res['facturacion'];
         this.balance_in = res['balance_in'];
         this.balance = res['balance'];
         this.exoneraciones = res['exoneraciones'];
         this.exoneraciones_in = res['exoneraciones_in'];
+
+        //balance de pagos y exoneraciones
+        if(this.datosClientes['serie'] == 1){
+          this.balancePagosTabla = new MatTableDataSource<any>(this.balance);
+        }else{
+          this.balancePagosTabla = new MatTableDataSource<any>(this.balance_in);
+        }
+        this.ngAfterViewInit();
+        
 
         //obtener notas creditos del cliente
         this._notaCredito.traerNotasDeCredito(this.idcliente).subscribe(
@@ -274,6 +190,7 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
         this._snackBar.open('Error al obtener datos de los servicios', 'ok',{duration: 5000});
       },() => {
         this.loading = false;
+        this.accordion.openAll();
       }
     );
   }
@@ -395,8 +312,15 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit {
       //status balance 2
       this.status_balance_html2 = this.balac_in;
     }
-    
-    
+  } //fin funcion
+
+  ngOnDestroy() {
+    if (this.peticionHttp) {
+      this.peticionHttp.unsubscribe();
+    }
+    if(this.peticionHttpDatosClientes){
+      this.peticionHttpDatosClientes.unsubscribe();
+    }
   }
 
 }

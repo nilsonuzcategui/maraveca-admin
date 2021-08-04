@@ -45,6 +45,8 @@ import { AgregarPlanComponent } from './planesComponentes/agregar-plan/agregar-p
 import { EditarPlanComponent } from './planesComponentes/editar-plan/editar-plan.component';
 import { FacturacionComponent } from './facturacion/facturacion.component';
 import { FacturacionGetDeudaPipe } from './pipes/facturacion-get-deuda.pipe';
+import { TablaClienteServicioComponent } from './clientesCompo/tabla-cliente-servicio/tabla-cliente-servicio.component';
+import { TablaClienteBalancesComponent } from './clientesCompo/tabla-cliente-balances/tabla-cliente-balances.component';
 
 
 
@@ -64,7 +66,9 @@ import { FacturacionGetDeudaPipe } from './pipes/facturacion-get-deuda.pipe';
     AgregarPlanComponent,
     EditarPlanComponent,
     FacturacionComponent,
-    FacturacionGetDeudaPipe
+    FacturacionGetDeudaPipe,
+    TablaClienteServicioComponent,
+    TablaClienteBalancesComponent
   ],
   entryComponents: [
     AggClienteComponent
