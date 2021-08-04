@@ -89,27 +89,27 @@
 
         <div class="col-md-9">
             <div style="display: flex; justify-content: space-between;" class="mb-2">
-                <span class="badge bg-secondary">Servicios: 1</span>
+                <span class="badge bg-secondary">Servicios: {{numServicios}}</span>
                 <mat-icon style="color: #625e5d;" matTooltip="Enviar recordatorio de pago">notifications</mat-icon>
             </div>
             
             <div class="row">
                 <div class="col-md-4">
-                    <mat-card>
+                    <mat-card style="background-color: #ad999917;">
                         <mat-card-subtitle>Status de Balance</mat-card-subtitle>
-                        <mat-card-title>0,00 Bs</mat-card-title>
+                        <mat-card-title>{{status_balance_html1 | number: "1.2-2"}} {{denominacion_html}}</mat-card-title>
                     </mat-card>
                 </div>
                 <div class="col-md-4">
-                    <mat-card>
+                    <mat-card style="background-color: #62a2482e;">
                         <mat-card-subtitle>Status de Balance</mat-card-subtitle>
-                        <mat-card-title>0,00 Bs</mat-card-title>
+                        <mat-card-title>{{status_balance_html2 | number: "1.2-2"}} {{denominacion_html}}</mat-card-title>
                     </mat-card>
                 </div>
                 <div class="col-md-4">
-                    <mat-card>
-                        <mat-card-subtitle>Status de Balance</mat-card-subtitle>
-                        <mat-card-title>0,00 Bs</mat-card-title>
+                    <mat-card style="background-color: #00b3e00d;">
+                        <mat-card-subtitle>Tipo de cliente</mat-card-subtitle>
+                        <mat-card-title>{{ tipo_cliente_html }}</mat-card-title>
                     </mat-card>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                 </mat-expansion-panel>
                 
               
-                <mat-expansion-panel style="background-color: #82000029;">
+                <mat-expansion-panel expanded>
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Historial
