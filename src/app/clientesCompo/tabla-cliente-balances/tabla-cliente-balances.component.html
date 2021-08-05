@@ -1,1 +1,37 @@
-<p>tabla-cliente-balances works!</p>
+<ng-container>
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+          <!-- Progress Column -->
+          <ng-container matColumnDef="id_bal">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.id_bal}} </td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="created_at">
+            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+            <td mat-cell *matCellDef="let row"> {{row.created_at | date: 'd/M/yy, h:mm a'}} </td>
+          </ng-container>
+      
+          <!-- Fruit Column -->
+          <ng-container matColumnDef="bal_monto">
+            <th mat-header-cell *matHeaderCellDef> Monto </th>
+            <td mat-cell *matCellDef="let row"> {{row.bal_monto}} </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="bal_tip">
+            <th mat-header-cell *matHeaderCellDef> bal_tip </th>
+            <td mat-cell *matCellDef="let row"> {{row.bal_tip }} </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="bal_stat">
+            <th mat-header-cell *matHeaderCellDef> bal_stat </th>
+            <td mat-cell *matCellDef="let row"> {{row.bal_stat }} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="columnasBalancesPagos"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnasBalancesPagos;"></tr>
+        </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+    </div>
+</ng-container>

@@ -134,11 +134,6 @@
                   
                   <app-tabla-cliente-servicio [data]='dataSource'></app-tabla-cliente-servicio>
 
-                  
-                  
-                  
-
-
 
               
                 </mat-expansion-panel>
@@ -155,43 +150,10 @@
                     </mat-panel-description>
                   </mat-expansion-panel-header>
 
+                  <app-tabla-cliente-historial [data]='historial'></app-tabla-cliente-historial>
 
-                  <div class="mat-elevation-z8">
-                    <table mat-table [dataSource]="historial">
-                  
-                      
-                  
-                      <!-- Progress Column -->
-                      <ng-container matColumnDef="history">
-                        <th mat-header-cell *matHeaderCellDef> Historia </th>
-                        <td mat-cell *matCellDef="let row"> {{row.history}} </td>
-                      </ng-container>
-                  
-                      <!-- Name Column -->
-                      <ng-container matColumnDef="modulo">
-                        <th mat-header-cell *matHeaderCellDef> Modulo </th>
-                        <td mat-cell *matCellDef="let row"> {{row.modulo}} </td>
-                      </ng-container>
-                  
-                      <!-- Fruit Column -->
-                      <ng-container matColumnDef="nombre_user">
-                        <th mat-header-cell *matHeaderCellDef> Responsable </th>
-                        <td mat-cell *matCellDef="let row"> {{row.nombre_user}} </td>
-                      </ng-container>
 
-                      <ng-container matColumnDef="created_at">
-                        <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                        <td mat-cell *matCellDef="let row"> {{row.created_at | date: 'd/M/yy, h:mm a'}} </td>
-                      </ng-container>
                   
-                      <tr mat-header-row *matHeaderRowDef="columnasHistorial"></tr>
-                      <tr mat-row *matRowDef="let row; columns: columnasHistorial;"></tr>
-     
-                      
-                    </table>
-                  
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-                  </div>
               
                   
 
@@ -213,41 +175,9 @@
 
                   <mat-tab-group>
                     <mat-tab label="Pagos"> 
-                      <div class="mat-elevation-z8">
-                        <table mat-table [dataSource]="balancePagosTabla">
-                          <!-- Progress Column -->
-                          <ng-container matColumnDef="id_bal">
-                            <th mat-header-cell *matHeaderCellDef> id_bal </th>
-                            <td mat-cell *matCellDef="let row"> {{row.id_bal}} </td>
-                          </ng-container>
                       
-                          <!-- Name Column -->
-                          <ng-container matColumnDef="created_at">
-                            <th mat-header-cell *matHeaderCellDef> created_at </th>
-                            <td mat-cell *matCellDef="let row"> {{row.created_at}} </td>
-                          </ng-container>
-                      
-                          <!-- Fruit Column -->
-                          <ng-container matColumnDef="bal_monto">
-                            <th mat-header-cell *matHeaderCellDef> bal_monto </th>
-                            <td mat-cell *matCellDef="let row"> {{row.bal_monto}} </td>
-                          </ng-container>
-    
-                          <ng-container matColumnDef="bal_tip">
-                            <th mat-header-cell *matHeaderCellDef> bal_tip </th>
-                            <td mat-cell *matCellDef="let row"> {{row.bal_tip }} </td>
-                          </ng-container>
+                      <app-tabla-cliente-balances [data]='balancePagosTabla' [clienteSerie]="datosClientes"></app-tabla-cliente-balances>
 
-                          <ng-container matColumnDef="bal_stat">
-                            <th mat-header-cell *matHeaderCellDef> bal_stat </th>
-                            <td mat-cell *matCellDef="let row"> {{row.bal_stat }} </td>
-                          </ng-container>
-                      
-                          <tr mat-header-row *matHeaderRowDef="columnasBalancesPagos"></tr>
-                          <tr mat-row *matRowDef="let row; columns: columnasBalancesPagos;"></tr>
-                        </table>
-                      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
-                      </div>
                     </mat-tab>
                     <mat-tab label="Exoneraciones"> Content 2 </mat-tab>
                   </mat-tab-group>

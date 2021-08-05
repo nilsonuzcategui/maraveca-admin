@@ -3,14 +3,6 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  description: string;
-}
-
 @Component({
   selector: 'app-tabla-cliente-servicio',
   templateUrl: './tabla-cliente-servicio.component.html',
@@ -26,7 +18,7 @@ export interface PeriodicElement {
 export class TablaClienteServicioComponent implements OnInit {
   @Input() data: any;
   dataSource = new MatTableDataSource<any>();
-  expandedElement: PeriodicElement | any;
+  expandedElement: any;
   columnsToDisplay = ['id_srv', 'name_plan', 'direccion'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
 

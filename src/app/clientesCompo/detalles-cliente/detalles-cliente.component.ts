@@ -27,8 +27,7 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestro
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
   @ViewChild(MatPaginator) paginatorBalances: MatPaginator | any;
   columnasServicios: string[] = ['id', 'name_plan', 'direccion'];
-  columnasHistorial: string[] = ['history', 'modulo', 'nombre_user', 'created_at'];
-  columnasBalancesPagos: string[] = ['id_bal', 'created_at', 'bal_monto', 'bal_tip','bal_stat'];
+  
 
 
   dataSource = new MatTableDataSource<any>();

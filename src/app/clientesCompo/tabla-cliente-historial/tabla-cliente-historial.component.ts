@@ -3,15 +3,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
-  selector: 'app-tabla-cliente-balances',
-  templateUrl: './tabla-cliente-balances.component.html',
-  styleUrls: ['./tabla-cliente-balances.component.css']
+  selector: 'app-tabla-cliente-historial',
+  templateUrl: './tabla-cliente-historial.component.html',
+  styleUrls: ['./tabla-cliente-historial.component.css']
 })
-export class TablaClienteBalancesComponent implements OnInit {
+export class TablaClienteHistorialComponent implements OnInit {
   @Input() data: any;
-  @Input() clienteSerie: any;
   dataSource = new MatTableDataSource<any>();
-  columnasBalancesPagos: string[] = ['id_bal', 'created_at', 'bal_monto', 'bal_tip','bal_stat'];
+  columnasHistorial: string[] = ['history', 'modulo', 'nombre_user', 'created_at'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
 
   constructor() { }
@@ -24,8 +23,6 @@ export class TablaClienteBalancesComponent implements OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    console.log('test ->',this.clienteSerie);
-    
     if (changes.data) {
       this.dataSource = new MatTableDataSource<any>(changes.data.currentValue.data);
       this.ngAfterViewInit();
