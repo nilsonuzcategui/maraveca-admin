@@ -50,13 +50,13 @@ export class LoginComponent implements OnInit {
               this.error = true;
               this.errorMensaje = 'Usuario/Contraseña Incorrecta.';
             }else{
-              sessionStorage.setItem('currentUser', JSON.stringify(use1));
-              this.currentUser = sessionStorage.getItem('currentUser');
+              localStorage.setItem('currentUser', JSON.stringify(use1));
+              this.currentUser = localStorage.getItem('currentUser');
               this.Usuario = this.currentUser;
               this.loginServicio.obtenerPermisos(use1['id_user']).subscribe(
                 (res : any) => {
                   let arrayPermisos: any[] = res;
-                  sessionStorage.setItem('permissions', JSON.stringify(arrayPermisos));
+                  localStorage.setItem('permissions', JSON.stringify(arrayPermisos));
                   arrayPermisos.forEach(element => {
                     this.auth.perm.push(element['perm']);
                   });

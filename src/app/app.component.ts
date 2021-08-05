@@ -19,14 +19,14 @@ export class AppComponent {
   permisoPlanes: boolean = false;
   
   constructor( ){
-    if (sessionStorage.getItem('currentUser')) {
+    if (localStorage.getItem('currentUser')) {
       this.isHeader = true;
     }else{
       this.isHeader = false;
     }
   }
   ngOnInit(): void {
-    this.p = JSON.parse(<any>sessionStorage.getItem('permissions'));
+    this.p = JSON.parse(<any>localStorage.getItem('permissions'));
     console.log(this.p.filter((x:any) => x.perm == 'clientes')[0]['perm']);
     
     if (this.p.filter((x:any) => x.perm == 'clientes').length > 0) {

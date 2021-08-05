@@ -53,7 +53,7 @@ export class ClientesComponent implements OnInit, AfterViewInit{
     private MatDialog: MatDialog,
     private router: Router
   ) {
-    this.userData = JSON.parse(<any>sessionStorage.getItem('currentUser'));
+    this.userData = JSON.parse(<any>localStorage.getItem('currentUser'));
     // console.log(this.userData);
   }
 

@@ -39,7 +39,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let userData = JSON.parse(<any>sessionStorage.getItem('currentUser'));
+    let userData = JSON.parse(<any>localStorage.getItem('currentUser'));
 
     this.iduser = userData['id_user'];
     this.nombreUsuario = userData['nombre_user'];
@@ -85,8 +85,8 @@ export class HeaderComponent implements OnInit {
   }
 
   cerrarSesion(){
-    sessionStorage.removeItem('currentUser');
-    sessionStorage.removeItem('permissions');
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('permissions');
     window.location.href = "/login";
   }
 }

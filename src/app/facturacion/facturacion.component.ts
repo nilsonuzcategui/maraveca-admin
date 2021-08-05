@@ -34,7 +34,7 @@ export interface FacturacionInterfaz {
   styleUrls: ['./facturacion.component.css']
 })
 export class FacturacionComponent implements OnInit {
-  iduser = JSON.parse(<any>sessionStorage.getItem('currentUser'))['id_user'];
+  iduser = JSON.parse(<any>localStorage.getItem('currentUser'))['id_user'];
 
   displayedColumns: string[] = [ 'id', 'cliente', 'estado', 'monto', 'deuda', 'created_at', 'acciones'];
   dataSource = new MatTableDataSource<FacturacionInterfaz>();

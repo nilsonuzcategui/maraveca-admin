@@ -38,7 +38,7 @@ export class PlanesComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private MatDialog: MatDialog,
   ) {
-    this.userData = JSON.parse(<any>sessionStorage.getItem('currentUser'));
+    this.userData = JSON.parse(<any>localStorage.getItem('currentUser'));
   }
 
   ngOnInit(): void {

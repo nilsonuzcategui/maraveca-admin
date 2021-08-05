@@ -47,7 +47,7 @@ export class ActualizarDolarComponent implements OnInit {
     if (this.value != '') {
       let datosForm = {
         taza: this.value,
-        responsable: JSON.parse(<any>sessionStorage.getItem('currentUser'))['id_user']
+        responsable: JSON.parse(<any>localStorage.getItem('currentUser'))['id_user']
       }
       this._planes.actualizarDolar(datosForm).subscribe(
         (res: any) => {
