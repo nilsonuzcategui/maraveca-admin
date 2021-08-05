@@ -48,6 +48,7 @@ import { FacturacionGetDeudaPipe } from './pipes/facturacion-get-deuda.pipe';
 import { TablaClienteServicioComponent } from './clientesCompo/tabla-cliente-servicio/tabla-cliente-servicio.component';
 import { TablaClienteBalancesComponent } from './clientesCompo/tabla-cliente-balances/tabla-cliente-balances.component';
 import { TablaClienteHistorialComponent } from './clientesCompo/tabla-cliente-historial/tabla-cliente-historial.component';
+import { BalTipTransformPipe } from './pipes/bal-tip-transform.pipe';
 
 
 
@@ -70,7 +71,8 @@ import { TablaClienteHistorialComponent } from './clientesCompo/tabla-cliente-hi
     FacturacionGetDeudaPipe,
     TablaClienteServicioComponent,
     TablaClienteBalancesComponent,
-    TablaClienteHistorialComponent
+    TablaClienteHistorialComponent,
+    BalTipTransformPipe
   ],
   entryComponents: [
     AggClienteComponent

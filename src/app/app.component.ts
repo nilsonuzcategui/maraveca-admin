@@ -27,7 +27,6 @@ export class AppComponent {
   }
   ngOnInit(): void {
     this.p = JSON.parse(<any>localStorage.getItem('permissions'));
-    console.log(this.p.filter((x:any) => x.perm == 'clientes')[0]['perm']);
     
     if (this.p.filter((x:any) => x.perm == 'clientes').length > 0) {
       this.permisoCliente = true;
@@ -52,8 +51,6 @@ export class AppComponent {
   }
   IniciaSesionEvent(){
     this.isHeader = true;
-    console.log('evento de mostrar head');
-    
   }
 
 }

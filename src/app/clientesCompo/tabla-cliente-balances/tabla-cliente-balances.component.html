@@ -1,32 +1,37 @@
-<ng-container>
+<!-- FACTURABLE -->
+<ng-container *ngIf="facturable == 1">
     <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource">
-          <!-- Progress Column -->
+         
           <ng-container matColumnDef="id_bal">
             <th mat-header-cell *matHeaderCellDef> ID </th>
             <td mat-cell *matCellDef="let row"> {{row.id_bal}} </td>
           </ng-container>
       
-          <!-- Name Column -->
           <ng-container matColumnDef="created_at">
             <th mat-header-cell *matHeaderCellDef> Fecha </th>
             <td mat-cell *matCellDef="let row"> {{row.created_at | date: 'd/M/yy, h:mm a'}} </td>
           </ng-container>
-      
-          <!-- Fruit Column -->
+          
+          <ng-container matColumnDef="bal_tip">
+            <th mat-header-cell *matHeaderCellDef> Método de pago </th>
+            <td mat-cell *matCellDef="let row">
+              {{row.bal_tip | balTipTransform}}
+            </td>
+          </ng-container>
+
           <ng-container matColumnDef="bal_monto">
             <th mat-header-cell *matHeaderCellDef> Monto </th>
-            <td mat-cell *matCellDef="let row"> {{row.bal_monto}} </td>
+            <td mat-cell *matCellDef="let row"> {{row.bal_monto | number: "1.2-2"}} bs</td>
           </ng-container>
     
-          <ng-container matColumnDef="bal_tip">
-            <th mat-header-cell *matHeaderCellDef> bal_tip </th>
-            <td mat-cell *matCellDef="let row"> {{row.bal_tip }} </td>
-          </ng-container>
     
           <ng-container matColumnDef="bal_stat">
             <th mat-header-cell *matHeaderCellDef> bal_stat </th>
-            <td mat-cell *matCellDef="let row"> {{row.bal_stat }} </td>
+            <td mat-cell *matCellDef="let row">
+              <mat-icon *ngIf="row.bal_stat == 1" style="color:#4ab54a">check_circle</mat-icon>
+              <mat-icon *ngIf="row.bal_stat != 1">highlight_off</mat-icon>
+            </td>
           </ng-container>
       
           <tr mat-header-row *matHeaderRowDef="columnasBalancesPagos"></tr>
@@ -34,4 +39,78 @@
         </table>
       <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
     </div>
+</ng-container>
+
+<!-- NO FACTURABLE -->
+<ng-container *ngIf="facturable != 1">
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+     
+      <ng-container matColumnDef="id_bal_in">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let row"> {{row.id_bal_in}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef> Fecha </th>
+        <td mat-cell *matCellDef="let row"> {{row.created_at | date: 'd/M/yy, h:mm a'}} </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="bal_tip_in">
+        <th mat-header-cell *matHeaderCellDef> Método de pago </th>
+        <td mat-cell *matCellDef="let row">
+          {{row.bal_tip_in | balTipTransform}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bal_monto_in">
+        <th mat-header-cell *matHeaderCellDef> Monto </th>
+        <td mat-cell *matCellDef="let row">
+            
+          <span *ngIf="
+            row.bal_tip_in != 12 &&
+            row.bal_tip_in != 13 &&
+            row.bal_tip_in != 14 &&
+            row.bal_tip_in != 16">
+              {{ row.conversion | number: "1.2-2" }} Bs (tasa{{ row.tasa }} Bs)
+          </span>
+          <span *ngIf="
+          row.bal_tip_in == 12 ||
+          row.bal_tip_in == 13 ||
+          row.bal_tip_in == 14 ||
+          row.bal_tip_in == 16 ||
+          row.bal_tip_in == 18">
+            {{ row.bal_monto_in | number: "1.2" }} $
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bal_comment_in">
+        <th mat-header-cell *matHeaderCellDef> Método de pago </th>
+        <td mat-cell *matCellDef="let row">
+          <span *ngIf="
+          row.bal_comment_mod_in == null ||
+          row.bal_comment_mod_in == ''">
+            {{ row.bal_comment_in }}
+          </span>
+          <span *ngIf="row.bal_comment_mod_in" style="color: #ff6c00;">
+            {{ row.bal_comment_mod_in }}
+          </span>
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="bal_stat_in">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-icon *ngIf="row.bal_stat_in == 1" style="color:#4ab54a">check_circle</mat-icon>
+          <mat-icon *ngIf="row.bal_stat_in != 1" style="color: #b93c3c;">highlight_off</mat-icon>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="columnasBalancesPagos2"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasBalancesPagos2;"></tr>
+    </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
 </ng-container>

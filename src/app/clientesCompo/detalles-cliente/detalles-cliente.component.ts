@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientesService } from 'src/app/_servicios/clientes.service';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
@@ -17,23 +17,12 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./detalles-cliente.component.css'],
 })
 
-export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DetallesClienteComponent implements OnInit, OnDestroy {
 
   peticionHttp: Subscription = new Subscription; //peticion http
   peticionHttpDatosClientes: Subscription = new Subscription; //peticion http
 
-
   @ViewChild(MatAccordion) accordion: MatAccordion | any;
-  @ViewChild(MatPaginator) paginator: MatPaginator | any;
-  @ViewChild(MatPaginator) paginatorBalances: MatPaginator | any;
-  columnasServicios: string[] = ['id', 'name_plan', 'direccion'];
-  
-
-
-  dataSource = new MatTableDataSource<any>();
-  
-  
-
 
   //VARIABLES PARA DATOS PERSONALES
   idcliente: any = this._route.snapshot.paramMap.get('id');
@@ -58,10 +47,11 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestro
   loading: boolean = true;
 
   //VARIABLES PARA EL CONTENIDO
-  datosClientes: any;
   servicios: MatTableDataSource<any> = <any>[];
   historial = new MatTableDataSource<any>();
   balancePagosTabla = new MatTableDataSource<any>();
+
+  datosClientes: any;
   numServicios: any;
   facturacion: any = [];
   notasCreditos: any = [];
@@ -105,7 +95,6 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestro
       (res: any) => {
         if (res.length > 0) {
           this.datosClientes = res[0]
-          console.log(this.datosClientes);
           //Seteo de variables
           this.registerForm = this.formBuilder.group({
             userid: [{value: this.idcliente, disabled: true}, Validators.required],
@@ -144,20 +133,17 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestro
     this.obtenerServiciosClientes();
   }
 
-  ngAfterViewInit() {
-    this.historial.paginator = this.paginator;
-    this.balancePagosTabla.paginator = this.paginatorBalances;
-  }
-
   obtenerServiciosClientes(){
     this.loading = true;
     this.peticionHttp = this._clientes.obtenerServiciosClientes(this.idcliente).subscribe(
       (res: any) =>{
         console.log(res);
         this.numServicios = res['servicios'].length;
-        this.dataSource = new MatTableDataSource<any>(res['servicios']); //tabla principal de servicios
+        //obtener datos para pasar a componentes hijos
+
+        this.servicios = new MatTableDataSource<any>(res['servicios']);
         this.historial = new MatTableDataSource<any>(res['history']);
-        
+
         //facturacion para pagos y facturas
         this.facturacion = res['facturacion'];
         this.balance_in = res['balance_in'];
@@ -165,19 +151,17 @@ export class DetallesClienteComponent implements OnInit, AfterViewInit, OnDestro
         this.exoneraciones = res['exoneraciones'];
         this.exoneraciones_in = res['exoneraciones_in'];
 
-        //balance de pagos y exoneraciones
         if(this.datosClientes['serie'] == 1){
-          this.balancePagosTabla = new MatTableDataSource<any>(this.balance);
+          this.balancePagosTabla = new MatTableDataSource<any>(res['balance']);
         }else{
-          this.balancePagosTabla = new MatTableDataSource<any>(this.balance_in);
+          this.balancePagosTabla = new MatTableDataSource<any>(res['balance_in']);
         }
-        this.ngAfterViewInit();
         
-
+        
         //obtener notas creditos del cliente
         this._notaCredito.traerNotasDeCredito(this.idcliente).subscribe(
           (res: any) => {
-            console.log(res);
+            // console.log(res);
             this.notasCreditos = res;
             this.obtener_totales_para_cartas();
           },(err: any) => {
