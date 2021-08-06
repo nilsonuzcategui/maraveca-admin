@@ -172,11 +172,14 @@
                       <app-tabla-cliente-balances [data]='balancePagosTabla' [clienteSerie]="datosClientes"></app-tabla-cliente-balances>
 
                     </mat-tab>
-                    <mat-tab label="Exoneraciones"> Content 2 </mat-tab>
+                    <mat-tab label="Exoneraciones">
+                      <app-tabla-cliente-balance-exoneraciones [data]='balancePagosTablaExoneraciones' [clienteSerie]="datosClientes"></app-tabla-cliente-balance-exoneraciones>
+                    </mat-tab>
                   </mat-tab-group>
 
               
                 </mat-expansion-panel>
+
 
                 
               </mat-accordion>

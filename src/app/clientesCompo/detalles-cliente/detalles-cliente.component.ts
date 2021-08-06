@@ -50,6 +50,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   servicios: MatTableDataSource<any> = <any>[];
   historial = new MatTableDataSource<any>();
   balancePagosTabla = new MatTableDataSource<any>();
+  balancePagosTablaExoneraciones = new MatTableDataSource<any>();
 
   datosClientes: any;
   numServicios: any;
@@ -153,8 +154,10 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
 
         if(this.datosClientes['serie'] == 1){
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance']);
+          this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones']);
         }else{
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance_in']);
+          this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones_in']);
         }
         
         
