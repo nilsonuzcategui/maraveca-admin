@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ClientesService } from 'src/app/_servicios/clientes.service';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormBuilder, Validators } from '@angular/forms';
-import {MatAccordion} from '@angular/material/expansion';
-import {MatPaginator} from '@angular/material/paginator';
+import { MatAccordion } from '@angular/material/expansion';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotaCreditoService } from 'src/app/_servicios/nota-credito.service';
 
@@ -27,19 +27,19 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   //VARIABLES PARA DATOS PERSONALES
   idcliente: any = this._route.snapshot.paramMap.get('id');
   registerForm = this.formBuilder.group({
-    userid: [{value: this.idcliente, disabled: true}, Validators.required],
-    tipo_cedula: [{value: 'V', disabled: true}, Validators.required],
-    cedula: [{value: '', disabled: true}, Validators.required],
-    nombre: [{value: '', disabled: true}, Validators.required],
-    apellido: [{value: '', disabled: true}, Validators.required],
-    fecha_nacimiento: [{value: '', disabled: true}],
-    telefono: [{value: '', disabled: true}],
-    correo: [{value: '', disabled: true}, [Validators.required, Validators.email]],
-    idestado: [{value: '', disabled: true}, Validators.required],
-    idmunicipio: [{value: '', disabled: true}, Validators.required],
-    idparroquia: [{value: '', disabled: true}, Validators.required],
+    userid: [{ value: this.idcliente, disabled: true }, Validators.required],
+    tipo_cedula: [{ value: 'V', disabled: true }, Validators.required],
+    cedula: [{ value: '', disabled: true }, Validators.required],
+    nombre: [{ value: '', disabled: true }, Validators.required],
+    apellido: [{ value: '', disabled: true }, Validators.required],
+    fecha_nacimiento: [{ value: '', disabled: true }],
+    telefono: [{ value: '', disabled: true }],
+    correo: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    idestado: [{ value: '', disabled: true }, Validators.required],
+    idmunicipio: [{ value: '', disabled: true }, Validators.required],
+    idparroquia: [{ value: '', disabled: true }, Validators.required],
     social: [null],
-    direccion: [{value: '', disabled: true}],
+    direccion: [{ value: '', disabled: true }],
     facturable: [false],
   });
 
@@ -81,7 +81,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   balac_$ = 0;
   balac_in = 0;
 
-  
+
 
   constructor(
     private _route: ActivatedRoute,
@@ -92,96 +92,134 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.obtenerDatosClientes();
+  }
+
+  obtenerDatosClientes() {
+    this.loading = true;
     this.peticionHttpDatosClientes = this._clientes.traerDatosCliente(this.idcliente).subscribe(
       (res: any) => {
         if (res.length > 0) {
           this.datosClientes = res[0]
           //Seteo de variables
           this.registerForm = this.formBuilder.group({
-            userid: [{value: this.idcliente, disabled: true}, Validators.required],
-            tipo_cedula: [{value: this.datosClientes['kind'], disabled: true}, Validators.required],
-            cedula: [{value: this.datosClientes['dni'], disabled: true}, Validators.required],
-            nombre: [{value: this.datosClientes['nombre'], disabled: true}, Validators.required],
-            apellido: [{value: this.datosClientes['apellido'], disabled: true}, Validators.required],
-            fecha_nacimiento: [{value: this.datosClientes['day_of_birth'], disabled: true}],
-            telefono: [{value: this.datosClientes['phone1'], disabled: true}],
-            correo: [{value: this.datosClientes['email'], disabled: true}, [Validators.required, Validators.email]],
-            idestado: [{value: this.datosClientes['estado'], disabled: true}, Validators.required],
-            idmunicipio: [{value: this.datosClientes['municipio'], disabled: true}, Validators.required],
-            idparroquia: [{value: this.datosClientes['parroquia'], disabled: true}, Validators.required],
+            userid: [{ value: this.idcliente, disabled: true }, Validators.required],
+            tipo_cedula: [{ value: this.datosClientes['kind'], disabled: true }, Validators.required],
+            cedula: [{ value: this.datosClientes['dni'], disabled: true }, Validators.required],
+            nombre: [{ value: this.datosClientes['nombre'], disabled: true }, Validators.required],
+            apellido: [{ value: this.datosClientes['apellido'], disabled: true }, Validators.required],
+            fecha_nacimiento: [{ value: this.datosClientes['day_of_birth'], disabled: true }],
+            telefono: [{ value: this.datosClientes['phone1'], disabled: true }],
+            correo: [{ value: this.datosClientes['email'], disabled: true }, [Validators.required, Validators.email]],
+            idestado: [{ value: this.datosClientes['estado'], disabled: true }, Validators.required],
+            idmunicipio: [{ value: this.datosClientes['municipio'], disabled: true }, Validators.required],
+            idparroquia: [{ value: this.datosClientes['parroquia'], disabled: true }, Validators.required],
             social: [this.datosClientes['social']],
-            direccion: [{value: this.datosClientes['direccion'], disabled: true}],
+            direccion: [{ value: this.datosClientes['direccion'], disabled: true }],
             facturable: [false],
           });
 
           //mostrar si es facturable o no facturable
-          if(this.datosClientes['serie'] == 1){
+          if (this.datosClientes['serie'] == 1) {
             this.tipo_cliente_html = 'Facturable';
-          }else{
+          } else {
             this.tipo_cliente_html = 'No Facturable';
           }
-        }else{
+
+          this.obtenerSoloServicios();
+        } else {
           this._snackBar.open('Lo siento, no pudimos obtener los datos del cliente', 'ok', {
             duration: 4000,
           });
         }
-      },(err: any) => {
+      }, (err: any) => {
         console.log(err);
-       
       }
     );
-    //buscar datos completos de servicios, historiales, ticket, todo.-.
-    this.obtenerServiciosClientes();
   }
 
-  obtenerServiciosClientes(){
-    this.loading = true;
-    this.peticionHttp = this._clientes.obtenerServiciosClientes(this.idcliente).subscribe(
-      (res: any) =>{
-        console.log(res);
-        this.numServicios = res['servicios'].length;
-        //obtener datos para pasar a componentes hijos
+  obtenerSoloServicios() {
+    this._clientes.obtenerServiciosClientes2(this.idcliente).subscribe(
+      (res: any) => {
+        console.log('api Servicios -> ', res);
+        this.servicios = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
+        this.numServicios = res['cuerpo'].length;
+        this.obtenerSoloHistorial();
+      }, (err: any) => {
+        console.log(err);
+      }
+    );
+  }
 
-        this.servicios = new MatTableDataSource<any>(res['servicios']);
-        this.historial = new MatTableDataSource<any>(res['history']);
+  obtenerSoloHistorial() {
+    this._clientes.obtenerHistorialClientes(this.idcliente).subscribe(
+      (res: any) => {
+        console.log('api historia -> ', res);
+        this.historial = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
+        this.obtenerSoloFacturaciones();
+      }, (err: any) => {
+        console.log(err);
+      }
+    );
+  }
 
-        //facturacion para pagos y facturas
-        this.facturacion = res['facturacion'];
+  obtenerSoloFacturaciones() {
+    this._clientes.obtenerFacturacionesClientes(this.idcliente).subscribe(
+      (res: any) => {
+        console.log('api facturaciones -> ', res);
+        this.facturacion = res['cuerpo']; //cuerpo de la respesta http que es el array
+        this.obtenerSoloNotasCreditos();
+      }, (err: any) => {
+        console.log(err);
+      }
+    );
+  }
+
+  obtenerSoloNotasCreditos() {
+    this._notaCredito.traerNotasDeCredito(this.idcliente).subscribe(
+      (res: any) => {
+        console.log('api Notas -> ', res);
+        this.notasCreditos = res;
+        this.obtenerSolobalancesYexoneraciones();
+      }, (err: any) => {
+        console.log(err);
+      }
+    );
+  }
+
+  obtenerSolobalancesYexoneraciones() {
+    this._clientes.obtenerBancesYexoneracionesClientes(this.idcliente).subscribe(
+      (res: any) => {
+        console.log('api balances - exoneraciones -> ', res);
         this.balance_in = res['balance_in'];
         this.balance = res['balance'];
         this.exoneraciones = res['exoneraciones'];
         this.exoneraciones_in = res['exoneraciones_in'];
 
-        if(this.datosClientes['serie'] == 1){
+        if (this.datosClientes['serie'] == 1) {
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance']);
           this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones']);
-        }else{
+        } else {
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance_in']);
           this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones_in']);
         }
-        
-        
-        //obtener notas creditos del cliente
-        this._notaCredito.traerNotasDeCredito(this.idcliente).subscribe(
-          (res: any) => {
-            // console.log(res);
-            this.notasCreditos = res;
-            this.obtener_totales_para_cartas();
-          },(err: any) => {
-            console.log(err);
-          }
-        );
-      },(err: any) => {
+
+        this.obtener_totales_para_cartas();
+      }, (err: any) => {
         console.log(err);
-        this._snackBar.open('Error al obtener datos de los servicios', 'ok',{duration: 5000});
-      },() => {
+      }, () => {
         this.loading = false;
         this.accordion.openAll();
       }
     );
   }
 
-  obtener_totales_para_cartas(){
+
+
+
+
+
+  obtener_totales_para_cartas() {
     var pagadoin_1 = 0
     var pagado_1 = 0
     var facturadoin_1 = 0
@@ -196,63 +234,63 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
 
     //array facturaciones
     this.facturacion.forEach((linea: any) => {
-      if (linea.denominacion == '$') {
-        if (linea.fac_status == 1) {
-          pagadoin_1 = pagadoin_1 + linea.pagado;
-          facturadoin_1 = facturadoin_1 + linea.monto;
+      if (linea['denominacion'] == '$') {
+        if (linea['fac_status'] == 1) {
+          pagadoin_1 = pagadoin_1 + parseFloat(linea['pagado']);
+          facturadoin_1 = facturadoin_1 + parseFloat(linea['monto']);
         }
       }
     });
     this.facturacion.forEach((linea: any) => {
-      if (linea.denominacion == 'Bs') {
-        if (linea.fac_status == 1) {
-          pagado_1 = pagado_1 + linea.pagado;
-          facturado_1 = facturado_1 + linea.monto;
+      if (linea['denominacion'] == 'Bs') {
+        if (linea['fac_status'] == 1) {
+          pagado_1 = pagado_1 + parseFloat(linea['pagado']);
+          facturado_1 = facturado_1 + parseFloat(linea['monto']);
         }
       }
     });
 
     //obteniendo notas de creditos
     this.notasCreditos.forEach((e: any) => {
-      if (e.tipo_nota == 1) {
-        facturadoNotaDebito_1 = facturadoNotaDebito_1 + Number(e.monto_nota)
-        PagadoNotaDebito_1 = PagadoNotaDebito_1 + Number(e.pagado)
+      if (e['tipo_nota'] == 1) {
+        facturadoNotaDebito_1 = facturadoNotaDebito_1 + Number(e['monto_nota'])
+        PagadoNotaDebito_1 = PagadoNotaDebito_1 + Number(e['pagado'])
       } else {
-        facturadoNotaCredito_1 = facturadoNotaCredito_1 + Number(e.monto_nota)
-        PagadoNotaCredito_1 = PagadoNotaCredito_1 + Number(e.pagado)
+        facturadoNotaCredito_1 = facturadoNotaCredito_1 + Number(e['monto_nota'])
+        PagadoNotaCredito_1 = PagadoNotaCredito_1 + Number(e['pagado'])
       }
     });
 
     //obteniendo balances
     this.balance_in.forEach((linea: any) => {
-      if (linea.bal_rest_in > 0 && linea.bal_stat_in == 1) {
-        balac_in_1 = balac_in_1 + Number(linea.bal_rest_in);
+      if (linea['bal_rest_in'] > 0 && linea['bal_stat_in'] == 1) {
+        balac_in_1 = balac_in_1 + Number(linea['bal_rest_in']);
       }
     });
 
     this.balance.forEach((linea: any) => {
-      if (linea.bal_rest > 0 && linea.bal_stat == 1 && (linea.bal_tip != 8 && linea.bal_tip != 9 && linea.bal_tip != 10 && linea.bal_tip != 11)) {
-        balac_1 = balac_1 + Number(linea.bal_rest);
-      } else if (linea.bal_rest > 0 && linea.bal_stat == 1 && (linea.bal_tip == 8 || linea.bal_tip == 9 || linea.bal_tip == 10 || linea.bal_tip == 11)) {
-        balac_$_1 = balac_$_1 + Number(linea.bal_rest);
+      if (linea['bal_rest'] > 0 && linea['bal_stat'] == 1 && (linea['bal_tip'] != 8 && linea['bal_tip'] != 9 && linea['bal_tip'] != 10 && linea['bal_tip'] != 11)) {
+        balac_1 = balac_1 + Number(linea['bal_rest']);
+      } else if (linea['bal_rest'] > 0 && linea['bal_stat'] == 1 && (linea['bal_tip'] == 8 || linea['bal_tip'] == 9 || linea['bal_tip'] == 10 || linea['bal_tip'] == 11)) {
+        balac_$_1 = balac_$_1 + Number(linea['bal_rest']);
       }
     });
 
     //obteniendo Exoneraciones
     this.exoneraciones.forEach((linea: any) => {
-      if (linea.bal_rest > 0 && linea.bal_stat == 1 && (linea.bal_tip != 8 && linea.bal_tip != 9 && linea.bal_tip != 10 && linea.bal_tip != 11)) {
-        balac_1 = balac_1 + Number(linea.bal_rest);
-      } else if (linea.bal_rest > 0 && linea.bal_stat == 1 && (linea.bal_tip == 8 || linea.bal_tip == 9 || linea.bal_tip == 10 || linea.bal_tip == 11)) {
-        balac_$_1 = balac_$_1 + Number(linea.bal_rest);
+      if (linea['bal_rest'] > 0 && linea['bal_stat'] == 1 && (linea['bal_tip'] != 8 && linea['bal_tip'] != 9 && linea['bal_tip'] != 10 && linea['bal_tip'] != 11)) {
+        balac_1 = balac_1 + Number(linea['bal_rest']);
+      } else if (linea['bal_rest'] > 0 && linea['bal_stat'] == 1 && (linea['bal_tip'] == 8 || linea['bal_tip'] == 9 || linea['bal_tip'] == 10 || linea['bal_tip'] == 11)) {
+        balac_$_1 = balac_$_1 + Number(linea['bal_rest']);
       }
     });
-    
+
     this.exoneraciones_in.forEach((linea: any) => {
-      if (linea.bal_rest_in > 0 && linea.bal_stat_in == 1) {
-        balac_in_1 = balac_in_1 + Number(linea.bal_rest_in);
+      if (linea['bal_rest_in'] > 0 && linea['bal_stat_in'] == 1) {
+        balac_in_1 = balac_in_1 + Number(linea['bal_rest_in']);
       }
     })
-    
+
     this.facturadoin = facturadoin_1;
     this.facturado = facturado_1;
 
@@ -271,26 +309,26 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
     this.balac_$ = balac_$_1;
     this.balac_in = balac_in_1;
 
-    if(this.datosClientes['social'] == 1){
+    if (this.datosClientes['social'] == 1) {
       this.denominacion_html = 'Bs';
       //status balance 1
-      if((this.facturado + this.MontoNotadeDebito ) > (this.pagado + this.MontoNotadeCredito)){
+      if ((this.facturado + this.MontoNotadeDebito) > (this.pagado + this.MontoNotadeCredito)) {
         this.status_balance_html1 = (this.facturado) - (this.pagado);
-      }else if( (this.facturado + this.MontoNotadeDebito ) < (this.pagado + this.MontoNotadeCredito) ){
+      } else if ((this.facturado + this.MontoNotadeDebito) < (this.pagado + this.MontoNotadeCredito)) {
         this.status_balance_html1 = 0;
-      }else if( (this.facturado + this.MontoNotadeDebito ) == (this.pagado + this.MontoNotadeCredito) ){
+      } else if ((this.facturado + this.MontoNotadeDebito) == (this.pagado + this.MontoNotadeCredito)) {
         this.status_balance_html1 = 0;
       }
 
       //status balance 2
-      if( (this.pagado + this.MontoNotadeCredito) > (this.facturado + this.MontoNotadeDebito ) ){
+      if ((this.pagado + this.MontoNotadeCredito) > (this.facturado + this.MontoNotadeDebito)) {
         this.status_balance_html2 = this.balac;
-      }else if( (this.pagado + this.MontoNotadeCredito) < (this.facturado + this.MontoNotadeDebito ) ){
+      } else if ((this.pagado + this.MontoNotadeCredito) < (this.facturado + this.MontoNotadeDebito)) {
         this.status_balance_html2 = 0;
-      }else if( (this.pagado + this.MontoNotadeCredito) == (this.facturado + this.MontoNotadeDebito ) ){
+      } else if ((this.pagado + this.MontoNotadeCredito) == (this.facturado + this.MontoNotadeDebito)) {
         this.status_balance_html2 = 0;
       }
-    }else{
+    } else {
       this.denominacion_html = '$';
       //status balance 1
       this.status_balance_html1 = (this.facturadoin - this.pagadoin);
@@ -298,13 +336,19 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
       //status balance 2
       this.status_balance_html2 = this.balac_in;
     }
+
+    console.log('facturado ->', this.facturado);
+    console.log('pagado ->', this.pagado);
+    console.log('facturado In ->', this.facturadoin);
+    console.log('pagado In->', this.pagadoin);
+    console.log('balc in ->', this.balac_in);
   } //fin funcion
 
   ngOnDestroy() {
     if (this.peticionHttp) {
       this.peticionHttp.unsubscribe();
     }
-    if(this.peticionHttpDatosClientes){
+    if (this.peticionHttpDatosClientes) {
       this.peticionHttpDatosClientes.unsubscribe();
     }
   }

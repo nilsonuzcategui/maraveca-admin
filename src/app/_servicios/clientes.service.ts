@@ -54,7 +54,41 @@ export class ClientesService {
     return this.http.get(this.loginS.API_URI+"cliente/"+id);
   }
 
+  traerDatosClienteApi(id: number){
+    return this.http.get(this.loginS.API_URI2+"clientes.php/");
+  }
+
+  
   obtenerServiciosClientes(idCliente: number){
     return this.http.get(this.loginS.API_URI+'clientover/'+idCliente);
   }
+
+  obtenerServiciosClientes2(idCliente: number){
+    return this.http.post(this.loginS.API_URI2+'clientes.php',{
+      opt: 'obtener_cliente_servicio',
+      id: idCliente
+    });
+  }
+
+  obtenerHistorialClientes(idCliente: number){
+    return this.http.post(this.loginS.API_URI2+'clientes.php',{
+      opt: 'obtener_cliente_historial',
+      id: idCliente
+    });
+  }
+
+  obtenerFacturacionesClientes(idCliente: number){
+    return this.http.post(this.loginS.API_URI2+'clientes.php',{
+      opt: 'obtener_cliente_facturaciones',
+      id: idCliente
+    });
+  }
+
+  obtenerBancesYexoneracionesClientes(idCliente: number){
+    return this.http.post(this.loginS.API_URI2+'clientes.php',{
+      opt: 'obtener_cliente_balances_y_exoneraciones',
+      id: idCliente
+    });
+  }
+
 }
