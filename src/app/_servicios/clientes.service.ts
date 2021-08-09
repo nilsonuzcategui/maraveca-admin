@@ -54,8 +54,11 @@ export class ClientesService {
     return this.http.get(this.loginS.API_URI+"cliente/"+id);
   }
 
-  traerDatosClienteApi(id: number){
-    return this.http.get(this.loginS.API_URI2+"clientes.php/");
+  traerDatosClienteApi(idCliente: number){
+    return this.http.post(this.loginS.API_URI2+"clientes.php/",{
+      opt: 'obtener_cliente',
+      id: idCliente
+    });
   }
 
   
@@ -84,10 +87,11 @@ export class ClientesService {
     });
   }
 
-  obtenerBancesYexoneracionesClientes(idCliente: number){
+  obtenerBancesYexoneracionesClientes(idCliente: number, clienteSocial: number){
     return this.http.post(this.loginS.API_URI2+'clientes.php',{
       opt: 'obtener_cliente_balances_y_exoneraciones',
-      id: idCliente
+      id: idCliente,
+      social: clienteSocial
     });
   }
 

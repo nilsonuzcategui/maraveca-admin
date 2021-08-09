@@ -97,10 +97,10 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
 
   obtenerDatosClientes() {
     this.loading = true;
-    this.peticionHttpDatosClientes = this._clientes.traerDatosCliente(this.idcliente).subscribe(
+    this.peticionHttpDatosClientes = this._clientes.traerDatosClienteApi(this.idcliente).subscribe(
       (res: any) => {
-        if (res.length > 0) {
-          this.datosClientes = res[0]
+        if (res['respuesta'] == 'exito') {
+          this.datosClientes = res['cuerpo']
           //Seteo de variables
           this.registerForm = this.formBuilder.group({
             userid: [{ value: this.idcliente, disabled: true }, Validators.required],
@@ -156,7 +156,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
       (res: any) => {
         console.log('api historia -> ', res);
         this.historial = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
-        this.obtenerSoloFacturaciones();
+        this.obtenerSolobalancesYexoneraciones();
       }, (err: any) => {
         console.log(err);
       }
@@ -188,7 +188,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   }
 
   obtenerSolobalancesYexoneraciones() {
-    this._clientes.obtenerBancesYexoneracionesClientes(this.idcliente).subscribe(
+    this._clientes.obtenerBancesYexoneracionesClientes(this.idcliente, this.datosClientes['social']).subscribe(
       (res: any) => {
         console.log('api balances - exoneraciones -> ', res);
         this.balance_in = res['balance_in'];
@@ -204,7 +204,11 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
           this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones_in']);
         }
 
-        this.obtener_totales_para_cartas();
+        // this.obtener_totales_para_cartas();
+        // ASIGNAMOS LOS DATOS DEL API
+        this.denominacion_html = res['denominacion'];
+        this.status_balance_html1 = res['status_balance_html1'];
+        this.status_balance_html2 = res['status_balance_html2'];
       }, (err: any) => {
         console.log(err);
       }, () => {

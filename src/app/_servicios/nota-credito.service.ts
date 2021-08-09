@@ -16,6 +16,13 @@ export class NotaCreditoService {
     return this.http.get<any[]>(this._login.API_URI+"notasCredito/"+id);
   }
 
+  // traerNotasDeCreditoApi(idCliente:number):Observable<any[]>{
+  //   return this.http.post<any[]>(this._login.API_URI2+"cliente.php/",{
+  //     opt: 'obtener_cliente_balances_y_exoneraciones',
+  //     id: idCliente,
+  //   });
+  // }
+
   traerProductos(id:number):Observable<any[]>{
     return this.http.get<any[]>(this._login.API_URI+"productosNota/"+id)
   }
