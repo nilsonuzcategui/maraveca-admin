@@ -60,6 +60,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   balance: any = [];
   exoneraciones: any = [];
   exoneraciones_in: any = [];
+  soporte: any = [];
 
   facturadoin = 0;
   facturado = 0;
@@ -230,8 +231,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerTicketCliente(){
     this._clientes.obtenerTicketsClientes(this.idcliente).subscribe(
       (res: any) => {
-        console.log(res);
-        
+        this.soporte = res['cuerpo'];
       },(err: any) => {
         console.log(err);
       },() => {
