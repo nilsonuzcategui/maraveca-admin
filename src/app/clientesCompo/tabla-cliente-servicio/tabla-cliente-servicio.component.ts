@@ -22,6 +22,8 @@ export class TablaClienteServicioComponent implements OnInit {
   columnsToDisplay = ['id_srv', 'name_plan', 'direccion'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
 
+  LoadingStatus: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {

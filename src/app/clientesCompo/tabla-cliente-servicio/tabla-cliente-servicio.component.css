@@ -44,4 +44,7 @@ table {
   .example-element-description-attribution {
     opacity: 0.5;
   }
-  
+
+  .example-button-row .mat-button-base {
+    margin: 8px 8px 8px 0;
+  }

@@ -95,4 +95,11 @@ export class ClientesService {
     });
   }
 
+  obtenerTicketsClientes(idCliente: number){
+    return this.http.post(this.loginS.API_URI2+'clientes.php',{
+      opt: 'obtener_cliente_ticket',
+      id: idCliente
+    });
+  }
+
 }

@@ -120,7 +120,7 @@
                 <button mat-button (click)="accordion.closeAll()" style="color: #666;"><mat-icon>visibility_off</mat-icon> Extraer todos</button>
               </div>
               <mat-accordion class="example-headers-align" multi>
-                <mat-expansion-panel style="background-color: #00b3e00d;">
+                <mat-expansion-panel style="background-color: #00b3e00d;" [expanded]="expandedServicios">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Servicios
@@ -130,16 +130,11 @@
                       <mat-icon>assignment</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-              
-                  
                   <app-tabla-cliente-servicio [data]='servicios'></app-tabla-cliente-servicio>
-
-
-              
                 </mat-expansion-panel>
                 
               
-                <mat-expansion-panel>
+                <mat-expansion-panel [expanded]="expandedHistorial">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Historial
@@ -149,13 +144,11 @@
                       <mat-icon>date_range</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
                   <app-tabla-cliente-historial [data]='historial'></app-tabla-cliente-historial>
-
                 </mat-expansion-panel>
 
 
-                <mat-expansion-panel style="background-color: #00b3e00d;">
+                <mat-expansion-panel style="background-color: #00b3e00d;" [expanded]="expandedBalances">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Balances de Pagos
@@ -165,19 +158,52 @@
                       <mat-icon>monetization_on</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-
                   <mat-tab-group>
                     <mat-tab label="Pagos"> 
-                      
                       <app-tabla-cliente-balances [data]='balancePagosTabla' [clienteSerie]="datosClientes"></app-tabla-cliente-balances>
-
                     </mat-tab>
                     <mat-tab label="Exoneraciones">
                       <app-tabla-cliente-balance-exoneraciones [data]='balancePagosTablaExoneraciones' [clienteSerie]="datosClientes"></app-tabla-cliente-balance-exoneraciones>
                     </mat-tab>
                   </mat-tab-group>
+                </mat-expansion-panel>
 
-              
+
+
+
+                <mat-expansion-panel [expanded]="expandedBalances">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Facturas
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Facturas y Ajustes
+                      <mat-icon>monetization_on</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <mat-tab-group>
+                    <mat-tab label="facturas"> 
+                      <app-tabla-cliente-facturas [data]="facturacion"></app-tabla-cliente-facturas>
+                    </mat-tab>
+                    <mat-tab label="Ajustes de Facturas">
+                      ajustes
+                    </mat-tab>
+                  </mat-tab-group>
+                </mat-expansion-panel>
+
+
+
+                <mat-expansion-panel style="background-color: #00b3e00d;" [expanded]="expandedServicios">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Tickets
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      Soporte
+                      <mat-icon>assignment</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <app-tabla-cliente-tickets></app-tabla-cliente-tickets>
                 </mat-expansion-panel>
 
 

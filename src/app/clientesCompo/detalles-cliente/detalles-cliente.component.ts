@@ -81,7 +81,10 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   balac_$ = 0;
   balac_in = 0;
 
-
+  //expandir accordion dinamicamente
+  expandedServicios: boolean = false;
+  expandedHistorial: boolean = false;
+  expandedBalances: boolean = false;
 
   constructor(
     private _route: ActivatedRoute,
@@ -144,6 +147,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
         console.log('api Servicios -> ', res);
         this.servicios = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
         this.numServicios = res['cuerpo'].length;
+        this.expandedServicios = true;
         this.obtenerSoloHistorial();
       }, (err: any) => {
         console.log(err);
@@ -156,6 +160,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
       (res: any) => {
         console.log('api historia -> ', res);
         this.historial = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
+        this.expandedHistorial = true;
         this.obtenerSolobalancesYexoneraciones();
       }, (err: any) => {
         console.log(err);
@@ -196,6 +201,8 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
         this.exoneraciones = res['exoneraciones'];
         this.exoneraciones_in = res['exoneraciones_in'];
 
+        this.facturacion = res['facturacion'];
+
         if (this.datosClientes['serie'] == 1) {
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance']);
           this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones']);
@@ -209,9 +216,25 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
         this.denominacion_html = res['denominacion'];
         this.status_balance_html1 = res['status_balance_html1'];
         this.status_balance_html2 = res['status_balance_html2'];
+
+        this.expandedServicios = true;
+
+        this.obtenerTicketCliente();
       }, (err: any) => {
         console.log(err);
-      }, () => {
+      }
+    );
+  }
+
+
+  obtenerTicketCliente(){
+    this._clientes.obtenerTicketsClientes(this.idcliente).subscribe(
+      (res: any) => {
+        console.log(res);
+        
+      },(err: any) => {
+        console.log(err);
+      },() => {
         this.loading = false;
         this.accordion.openAll();
       }
@@ -222,7 +245,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
 
 
 
-
+ //FUNCION NO UTILIZADA EN EL FRONT
   obtener_totales_para_cartas() {
     var pagadoin_1 = 0
     var pagado_1 = 0

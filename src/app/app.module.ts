@@ -50,6 +50,8 @@ import { TablaClienteBalancesComponent } from './clientesCompo/tabla-cliente-bal
 import { TablaClienteHistorialComponent } from './clientesCompo/tabla-cliente-historial/tabla-cliente-historial.component';
 import { BalTipTransformPipe } from './pipes/bal-tip-transform.pipe';
 import { TablaClienteBalanceExoneracionesComponent } from './clientesCompo/tabla-cliente-balance-exoneraciones/tabla-cliente-balance-exoneraciones.component';
+import { TablaClienteFacturasComponent } from './clientesCompo/tabla-cliente-facturas/tabla-cliente-facturas.component';
+import { TablaClienteTicketsComponent } from './clientesCompo/tabla-cliente-tickets/tabla-cliente-tickets.component';
 
 
 
@@ -74,7 +76,9 @@ import { TablaClienteBalanceExoneracionesComponent } from './clientesCompo/tabla
     TablaClienteBalancesComponent,
     TablaClienteHistorialComponent,
     BalTipTransformPipe,
-    TablaClienteBalanceExoneracionesComponent
+    TablaClienteBalanceExoneracionesComponent,
+    TablaClienteFacturasComponent,
+    TablaClienteTicketsComponent
   ],
   entryComponents: [
     AggClienteComponent
