@@ -53,6 +53,7 @@ import { TablaClienteBalanceExoneracionesComponent } from './clientesCompo/tabla
 import { TablaClienteFacturasComponent } from './clientesCompo/tabla-cliente-facturas/tabla-cliente-facturas.component';
 import { TablaClienteTicketsComponent } from './clientesCompo/tabla-cliente-tickets/tabla-cliente-tickets.component';
 import { TicketEstadoPipe } from './pipes/ticket-estado.pipe';
+import { PopupEditarServicioComponent } from './clientesCompo/popup-editar-servicio/popup-editar-servicio.component';
 
 
 
@@ -80,7 +81,8 @@ import { TicketEstadoPipe } from './pipes/ticket-estado.pipe';
     TablaClienteBalanceExoneracionesComponent,
     TablaClienteFacturasComponent,
     TablaClienteTicketsComponent,
-    TicketEstadoPipe
+    TicketEstadoPipe,
+    PopupEditarServicioComponent
   ],
   entryComponents: [
     AggClienteComponent

@@ -2,6 +2,8 @@ import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/cor
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { PopupEditarServicioComponent } from '../popup-editar-servicio/popup-editar-servicio.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-tabla-cliente-servicio',
@@ -24,7 +26,9 @@ export class TablaClienteServicioComponent implements OnInit {
 
   LoadingStatus: boolean = false;
 
-  constructor() { }
+  constructor(
+    private MatDialog: MatDialog,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -39,6 +43,21 @@ export class TablaClienteServicioComponent implements OnInit {
       this.dataSource = new MatTableDataSource<any>(changes.data.currentValue.data);
       this.ngAfterViewInit();
     }
+  }
+
+  editarServicio(datos: any){
+    let dialogRef = this.MatDialog.open(PopupEditarServicioComponent,
+      {
+        width: '900px',
+        data: datos
+      });
+
+      dialogRef.afterClosed().subscribe(
+        result => {
+          console.log(result);
+          
+        }
+      );
   }
 
 }

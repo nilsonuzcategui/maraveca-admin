@@ -13,7 +13,11 @@
           <div style="display: flex;justify-content: space-between;">
             <div>
               <button mat-icon-button>
-                <mat-icon matTooltip="ACTIVO" [matMenuTriggerFor]="menuStatus" style="color: #63b963;">check_circle</mat-icon>
+                <mat-icon *ngIf="element['stat_srv']==1" matTooltip="ACTIVO" [matMenuTriggerFor]="menuStatus" style="color: #63b963;">check_circle</mat-icon>
+                <mat-icon *ngIf="element['stat_srv']==3" matTooltip="SUSPENDIDO" [matMenuTriggerFor]="menuStatus" style="color: #a59d9d;">remove_circle</mat-icon>
+                <mat-icon *ngIf="element['stat_srv']==4" matTooltip="RETIRADO" [matMenuTriggerFor]="menuStatus" style="color: #b93c3c;">highlight_off</mat-icon>
+                <mat-icon *ngIf="element['stat_srv']==5" matTooltip="EXONORADO" [matMenuTriggerFor]="menuStatus" style="color: #efcd19;">grade</mat-icon>
+                
                 <mat-icon class="spinner" *ngIf="LoadingStatus">settings_backup_restore</mat-icon>
                 <!-- <span class="spinner"></span> -->
               </button>
@@ -31,7 +35,7 @@
                   <span>Retirar</span>
                 </button>
                 <button mat-menu-item>
-                  <mat-icon style="color: #eabb45;">grade</mat-icon>
+                  <mat-icon style="color: #efcd19;">grade</mat-icon>
                   <span>Exonerado</span>
                 </button>
               </mat-menu>
@@ -42,7 +46,7 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item>
+                <button mat-menu-item (click)="editarServicio(element)">
                   <mat-icon>mode_edit</mat-icon>
                   <span>Editar</span>
                 </button>
