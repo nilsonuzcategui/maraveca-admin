@@ -145,7 +145,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloServicios() {
     this._clientes.obtenerServiciosClientes2(this.idcliente).subscribe(
       (res: any) => {
-        console.log('api Servicios -> ', res);
+        // console.log('api Servicios -> ', res);
         this.servicios = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
         this.numServicios = res['cuerpo'].length;
         this.expandedServicios = true;
@@ -159,7 +159,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloHistorial() {
     this._clientes.obtenerHistorialClientes(this.idcliente).subscribe(
       (res: any) => {
-        console.log('api historia -> ', res);
+        // console.log('api historia -> ', res);
         this.historial = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
         this.expandedHistorial = true;
         this.obtenerSolobalancesYexoneraciones();
@@ -172,7 +172,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloFacturaciones() {
     this._clientes.obtenerFacturacionesClientes(this.idcliente).subscribe(
       (res: any) => {
-        console.log('api facturaciones -> ', res);
+        // console.log('api facturaciones -> ', res);
         this.facturacion = res['cuerpo']; //cuerpo de la respesta http que es el array
         this.obtenerSoloNotasCreditos();
       }, (err: any) => {
@@ -184,7 +184,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloNotasCreditos() {
     this._notaCredito.traerNotasDeCredito(this.idcliente).subscribe(
       (res: any) => {
-        console.log('api Notas -> ', res);
+        // console.log('api Notas -> ', res);
         this.notasCreditos = res;
         this.obtenerSolobalancesYexoneraciones();
       }, (err: any) => {
@@ -196,7 +196,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSolobalancesYexoneraciones() {
     this._clientes.obtenerBancesYexoneracionesClientes(this.idcliente, this.datosClientes['social']).subscribe(
       (res: any) => {
-        console.log('api balances - exoneraciones -> ', res);
+        // console.log('api balances - exoneraciones -> ', res);
         this.balance_in = res['balance_in'];
         this.balance = res['balance'];
         this.exoneraciones = res['exoneraciones'];
@@ -364,11 +364,11 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
       this.status_balance_html2 = this.balac_in;
     }
 
-    console.log('facturado ->', this.facturado);
-    console.log('pagado ->', this.pagado);
-    console.log('facturado In ->', this.facturadoin);
-    console.log('pagado In->', this.pagadoin);
-    console.log('balc in ->', this.balac_in);
+    // console.log('facturado ->', this.facturado);
+    // console.log('pagado ->', this.pagado);
+    // console.log('facturado In ->', this.facturadoin);
+    // console.log('pagado In->', this.pagadoin);
+    // console.log('balc in ->', this.balac_in);
   } //fin funcion
 
   ngOnDestroy() {

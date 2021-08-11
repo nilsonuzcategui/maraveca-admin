@@ -23,7 +23,7 @@ export class TablaClienteFacturasComponent implements OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    console.log('componente factura ->', changes.data.currentValue);
+    // console.log('componente factura ->', changes.data.currentValue);
     
     if (changes.data) {
       this.dataSource = new MatTableDataSource<any>(changes.data.currentValue);
