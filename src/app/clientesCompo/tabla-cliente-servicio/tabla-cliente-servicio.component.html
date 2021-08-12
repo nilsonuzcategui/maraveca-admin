@@ -22,19 +22,19 @@
                 <!-- <span class="spinner"></span> -->
               </button>
               <mat-menu #menuStatus="matMenu">
-                <button mat-menu-item>
+                <button mat-menu-item (click)="cambiarEstadoServicio(element, 1)">
                   <mat-icon style="color: #63b963;">check_circle</mat-icon>
                   <span>Activar</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="cambiarEstadoServicio(element, 3)">
                   <mat-icon style="color: #a59d9d;">remove_circle</mat-icon>
                   <span>Suspender</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="cambiarEstadoServicio(element, 4)">
                   <mat-icon style="color: #b93c3c;">highlight_off</mat-icon>
                   <span>Retirar</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="cambiarEstadoServicio(element, 5)">
                   <mat-icon style="color: #efcd19;">grade</mat-icon>
                   <span>Exonerado</span>
                 </button>

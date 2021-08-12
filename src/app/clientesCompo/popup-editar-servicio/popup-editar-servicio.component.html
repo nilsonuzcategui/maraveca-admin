@@ -1,5 +1,85 @@
 <h5>
-    Cliente: 
-    <span> {{ data.nombre }} {{ data.apellido }}</span>
+    Cliente:
+    <span *ngIf="data.kind == 'V' || data.kind == 'E'"> {{ data.nombre }} {{ data.apellido }}</span>
+    <span *ngIf="data.kind != 'V' && data.kind != 'E'"> {{ data.social }}</span>
 </h5>
 <hr>
+<form class="example-container row" [formGroup]="groupForm" (submit)="submitForm()">
+    <mat-form-field class="col-md-4">
+        <mat-label>Tipo de cliente *</mat-label>
+        <mat-select formControlName="serie_srv">
+            <mat-option value="1">Facturable</mat-option>
+            <mat-option value="0">No Facturable</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Estado *</mat-label>
+        <mat-select formControlName="stat_srv">
+            <mat-option value="1">Activo</mat-option>
+            <mat-option value="3">Suspendido</mat-option>
+            <mat-option value="4">Retirado</mat-option>
+            <mat-option value="5">Exonerado</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Tipo Plan *</mat-label>
+        <mat-select formControlName="tipo_plan" (selectionChange)="cambiandoTipoPlan($event)">
+            <mat-option value="0">Seleccionar</mat-option>
+            <ng-container *ngIf="data.tipo_srv == 1">
+                <mat-option value="1">Planes Antiguos</mat-option>
+                <mat-option value="3">Planes En Dolares</mat-option>
+                <mat-option value="4">Planes Nuevos</mat-option>
+                <mat-option value="5">Planes Solo Dedicados</mat-option>
+                <mat-option value="6">Planes Zulia</mat-option>
+            </ng-container>
+
+            <ng-container *ngIf="data.tipo_srv == 2">
+                <mat-option value="7">Planes Fibra</mat-option>
+            </ng-container>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+        <mat-label>Plan</mat-label>
+        <mat-select formControlName="id_plan">
+            <mat-option value="0">Seleccione</mat-option>
+            <mat-option *ngFor="let p of arrayPlan" [value]="p['id_plan']">{{ p['name_plan'] }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <!-- MOSTRAR IP O CAJA DE DISTRIBUCIÓN -->
+    <mat-form-field class="col-md-6" *ngIf="data.tipo_srv == 1">
+        <mat-label>IP</mat-label>
+        <input matInput formControlName="ip_srv">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6" *ngIf="data.tipo_srv == 2">
+        <mat-label>Caja Distribución</mat-label>
+        <mat-select formControlName="ap_srv">
+            <mat-option value="0">Seleccione</mat-option>
+            <mat-option *ngFor="let c of arrayCajas" [value]="c['id_caja']">{{ c['nombre_caja'] }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <!--FIN DE MOSTRAR IP O CAJA DE DISTRIBUCIÓN -->
+
+    <!-- <mat-form-field class="col-md-4">
+        <mat-label>Equipo</mat-label>
+        <mat-select formControlName="id_plan">
+            <mat-option value="0">Seleccione</mat-option>
+            <mat-option *ngFor="let p of arrayPlan" [value]="p['id_plan']">{{ p['name_plan'] }}</mat-option>
+        </mat-select>
+    </mat-form-field> -->
+
+
+    <div class="col-12 mt-3 text-center">
+        <mat-progress-bar *ngIf="loadingForm" mode="indeterminate"></mat-progress-bar>
+        <div class="example-button-row" *ngIf="!loadingForm">
+            <button mat-raised-button type="button">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit">Guardar</button>
+        </div>
+    </div>
+
+
+</form>

@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { PopupEditarServicioComponent } from '../popup-editar-servicio/popup-editar-servicio.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ServiciosService } from 'src/app/_servicios/servicios.service';
 
 @Component({
   selector: 'app-tabla-cliente-servicio',
@@ -20,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class TablaClienteServicioComponent implements OnInit {
   @Input() data: any;
   dataSource = new MatTableDataSource<any>();
+  arrayDatos: any = [];
   expandedElement: any;
   columnsToDisplay = ['id_srv', 'name_plan', 'direccion'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
@@ -28,6 +30,7 @@ export class TablaClienteServicioComponent implements OnInit {
 
   constructor(
     private MatDialog: MatDialog,
+    private _servicios: ServiciosService
   ) { }
 
   ngOnInit(): void {
@@ -58,6 +61,36 @@ export class TablaClienteServicioComponent implements OnInit {
           
         }
       );
+  }
+
+
+  cambiarEstadoServicio(datos: any, idestado: number){
+    this.LoadingStatus = true;
+    console.log(datos, idestado);
+    let idServicio = datos['id_srv'];
+    let ipServicio = datos['ip_srv'];
+    let tipo_srv = datos['tipo_srv'];
+    let ip_api = datos['ip_api'];
+    let userMK = datos['user_srvidor'];
+    let passMK = datos['password_srvidor'];
+
+    // this._servicios.modificarEstadoServicio(idServicio, ipServicio, idestado, tipo_srv, ip_api, userMK, passMK).subscribe(
+    //   (res: any) => {
+    //     console.log(res);
+    //   },(err: any) => {
+    //     console.log(err);
+    //   },() => {
+    //     this.LoadingStatus = false;
+    //   }
+    // );
+
+    //MODIFICAR ICONO
+    this.arrayDatos = this.dataSource;
+    let indice = this.arrayDatos.findIndex((d: any) => d['id_srv'] == datos['id_srv']);
+    this.arrayDatos[indice]['stat_srv'] = idestado;
+
+    this.dataSource = this.arrayDatos;
+    this.dataSource._updateChangeSubscription();
   }
 
 }

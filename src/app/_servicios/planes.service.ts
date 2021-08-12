@@ -35,4 +35,17 @@ export class PlanesService {
     return this.http.put(this.loginS.API_URI+'planes/'+idplan, datos);
   }
 
+  obtenerPlanes(idtipoPlan: number):Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'planes.php',{
+      opt: 'obtener_planes_segun_su_tipo',
+      idtipo: idtipoPlan
+    });
+  }
+
+  traerCajaDistribucion():Observable<any>{
+    return this.http.post(this.loginS.API_URI2+"planes.php",{
+      opt: 'obtener_cajas_de_distribucion'
+    });
+  }
+
 }
