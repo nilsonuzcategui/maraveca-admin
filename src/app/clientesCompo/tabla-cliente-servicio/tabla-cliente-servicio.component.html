@@ -1,3 +1,6 @@
+<mat-progress-bar mode="indeterminate" *ngIf="LoadingStatus"></mat-progress-bar>
+
+
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
     <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
@@ -13,13 +16,18 @@
           <div style="display: flex;justify-content: space-between;">
             <div>
               <button mat-icon-button>
-                <mat-icon *ngIf="element['stat_srv']==1" matTooltip="ACTIVO" [matMenuTriggerFor]="menuStatus" style="color: #63b963;">check_circle</mat-icon>
-                <mat-icon *ngIf="element['stat_srv']==3" matTooltip="SUSPENDIDO" [matMenuTriggerFor]="menuStatus" style="color: #a59d9d;">remove_circle</mat-icon>
-                <mat-icon *ngIf="element['stat_srv']==4" matTooltip="RETIRADO" [matMenuTriggerFor]="menuStatus" style="color: #b93c3c;">highlight_off</mat-icon>
-                <mat-icon *ngIf="element['stat_srv']==5" matTooltip="EXONORADO" [matMenuTriggerFor]="menuStatus" style="color: #efcd19;">grade</mat-icon>
-                
-                <mat-icon class="spinner" *ngIf="LoadingStatus">settings_backup_restore</mat-icon>
-                <!-- <span class="spinner"></span> -->
+                <ng-container *ngIf="!LoadingStatus">
+                  <mat-icon *ngIf="element['stat_srv']==1" matTooltip="ACTIVO" [matMenuTriggerFor]="menuStatus"
+                    style="color: #63b963;">check_circle</mat-icon>
+                  <mat-icon *ngIf="element['stat_srv']==3" matTooltip="SUSPENDIDO" [matMenuTriggerFor]="menuStatus"
+                    style="color: #a59d9d;">remove_circle</mat-icon>
+                  <mat-icon *ngIf="element['stat_srv']==4" matTooltip="RETIRADO" [matMenuTriggerFor]="menuStatus"
+                    style="color: #b93c3c;">highlight_off</mat-icon>
+                  <mat-icon *ngIf="element['stat_srv']==5" matTooltip="EXONORADO" [matMenuTriggerFor]="menuStatus"
+                    style="color: #efcd19;">grade</mat-icon>
+                </ng-container>
+
+                <!-- <mat-icon class="spinner" *ngIf="LoadingStatus">settings_backup_restore</mat-icon> -->
               </button>
               <mat-menu #menuStatus="matMenu">
                 <button mat-menu-item (click)="cambiarEstadoServicio(element, 1)">
@@ -40,7 +48,7 @@
                 </button>
               </mat-menu>
             </div>
-            
+
             <div>
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
@@ -65,9 +73,9 @@
               </mat-menu>
             </div>
           </div>
-          
 
-          
+
+
 
 
 

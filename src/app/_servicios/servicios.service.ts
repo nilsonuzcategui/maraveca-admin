@@ -33,4 +33,36 @@ export class ServiciosService {
       passMK: passMK
     });
   }
+
+  obtenerEquiposInstalacion(tipoServicio: number):Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'servicios.php',{
+      opt: 'obtener_equipos_instalacion',
+      tipo_srv: tipoServicio
+    });
+  }
+
+  obtenerCeldasPractica(){
+    return this.http.post(this.loginS.API_URI2+'servicios.php',{
+      opt: 'obtener_celdas_practicas'
+    });
+  }
+
+  obtenerSerialesEquipo(idZona: number, modelo: string):Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'servicios.php',{
+      opt: 'obtener_seriales_equipos',
+      idzona: idZona,
+      modelo: modelo,
+    });
+  }
+
+
+  seeeriiiaallleesss(idZona: any, modelo: string):Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'servicios.php',{
+      opt: 'obtener_seriales_equipos',
+      idzona: idZona,
+      idzonaa: '123123',
+      modelo: modelo,
+      test: idZona
+    });
+  }
 }

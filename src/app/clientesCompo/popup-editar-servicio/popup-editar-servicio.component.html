@@ -64,13 +64,21 @@
     </mat-form-field>
     <!--FIN DE MOSTRAR IP O CAJA DE DISTRIBUCIÓN -->
 
-    <!-- <mat-form-field class="col-md-4">
+    <mat-form-field class="col-md-4">
         <mat-label>Equipo</mat-label>
-        <mat-select formControlName="id_plan">
-            <mat-option value="0">Seleccione</mat-option>
-            <mat-option *ngFor="let p of arrayPlan" [value]="p['id_plan']">{{ p['name_plan'] }}</mat-option>
+        <mat-select formControlName="nombre_equipo" (selectionChange)="cambiandoEquipo($event)">
+            <mat-option value="">Seleccione</mat-option>
+            <mat-option *ngFor="let e of arrayEquipos" [value]="e['nombre_equipo']">{{ e['nombre_equipo'] }}</mat-option>
         </mat-select>
-    </mat-form-field> -->
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Serial</mat-label>
+        <mat-select formControlName="serial_srv">
+            <mat-option value="">Seleccione</mat-option>
+            <mat-option *ngFor="let s of arraySeriales" [value]="s['serial_articulo']">{{ s['serial_articulo'] }}</mat-option>
+        </mat-select>
+    </mat-form-field>
 
 
     <div class="col-12 mt-3 text-center">

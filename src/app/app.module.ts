@@ -26,6 +26,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs, 'es');
@@ -54,6 +55,7 @@ import { TablaClienteFacturasComponent } from './clientesCompo/tabla-cliente-fac
 import { TablaClienteTicketsComponent } from './clientesCompo/tabla-cliente-tickets/tabla-cliente-tickets.component';
 import { TicketEstadoPipe } from './pipes/ticket-estado.pipe';
 import { PopupEditarServicioComponent } from './clientesCompo/popup-editar-servicio/popup-editar-servicio.component';
+import { AlertaPreguntaCerradaComponent } from './componentes/alerta-pregunta-cerrada/alerta-pregunta-cerrada.component';
 
 
 
@@ -82,7 +84,8 @@ import { PopupEditarServicioComponent } from './clientesCompo/popup-editar-servi
     TablaClienteFacturasComponent,
     TablaClienteTicketsComponent,
     TicketEstadoPipe,
-    PopupEditarServicioComponent
+    PopupEditarServicioComponent,
+    AlertaPreguntaCerradaComponent
   ],
   entryComponents: [
     AggClienteComponent
@@ -114,7 +117,8 @@ import { PopupEditarServicioComponent } from './clientesCompo/popup-editar-servi
     MatSelectModule,
     MatSnackBarModule,
     MatTabsModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatBottomSheetModule
   ],
   providers: [ { provide: LOCALE_ID, useValue: 'es' } ],
   bootstrap: [AppComponent]

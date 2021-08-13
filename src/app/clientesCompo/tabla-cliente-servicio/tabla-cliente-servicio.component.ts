@@ -1,10 +1,12 @@
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { PopupEditarServicioComponent } from '../popup-editar-servicio/popup-editar-servicio.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiciosService } from 'src/app/_servicios/servicios.service';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { AlertaPreguntaCerradaComponent } from 'src/app/componentes/alerta-pregunta-cerrada/alerta-pregunta-cerrada.component';
 
 @Component({
   selector: 'app-tabla-cliente-servicio',
@@ -12,8 +14,8 @@ import { ServiciosService } from 'src/app/_servicios/servicios.service';
   styleUrls: ['./tabla-cliente-servicio.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ]
@@ -30,7 +32,8 @@ export class TablaClienteServicioComponent implements OnInit {
 
   constructor(
     private MatDialog: MatDialog,
-    private _servicios: ServiciosService
+    private _servicios: ServiciosService,
+    private _bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit(): void {
@@ -39,34 +42,33 @@ export class TablaClienteServicioComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  
+
   public ngOnChanges(changes: SimpleChanges) {
-    // console.log('componente hijo en cambio->', changes.data.currentValue.data);
     if (changes.data) {
       this.dataSource = new MatTableDataSource<any>(changes.data.currentValue.data);
+      this.arrayDatos = changes.data.currentValue.data;
       this.ngAfterViewInit();
     }
   }
 
-  editarServicio(datos: any){
+  editarServicio(datos: any) {
     let dialogRef = this.MatDialog.open(PopupEditarServicioComponent,
       {
         width: '900px',
         data: datos
       });
 
-      dialogRef.afterClosed().subscribe(
-        result => {
-          console.log(result);
-          
-        }
-      );
+    dialogRef.afterClosed().subscribe(
+      result => {
+        console.log(result);
+
+      }
+    );
   }
 
 
-  cambiarEstadoServicio(datos: any, idestado: number){
+  cambiarEstadoServicio(datos: any, idestado: number) {
     this.LoadingStatus = true;
-    console.log(datos, idestado);
     let idServicio = datos['id_srv'];
     let ipServicio = datos['ip_srv'];
     let tipo_srv = datos['tipo_srv'];
@@ -74,23 +76,34 @@ export class TablaClienteServicioComponent implements OnInit {
     let userMK = datos['user_srvidor'];
     let passMK = datos['password_srvidor'];
 
-    // this._servicios.modificarEstadoServicio(idServicio, ipServicio, idestado, tipo_srv, ip_api, userMK, passMK).subscribe(
-    //   (res: any) => {
-    //     console.log(res);
-    //   },(err: any) => {
-    //     console.log(err);
-    //   },() => {
-    //     this.LoadingStatus = false;
-    //   }
-    // );
+    // this._bottomSheet.open(AlertaPreguntaCerradaComponent);
 
-    //MODIFICAR ICONO
-    this.arrayDatos = this.dataSource;
-    let indice = this.arrayDatos.findIndex((d: any) => d['id_srv'] == datos['id_srv']);
-    this.arrayDatos[indice]['stat_srv'] = idestado;
+    var r = confirm("¿Seguro que quiere cambiar el estado del servicio ?");
+    if (r == true) {
+      // this._servicios.modificarEstadoServicio(idServicio, ipServicio, idestado, tipo_srv, ip_api, userMK, passMK).subscribe(
+      //   (res: any) => {
+      //     console.log(res);
+      //   },(err: any) => {
+      //     console.log(err);
+      //   },() => {
+      //     this.LoadingStatus = false;
+      //   }
+      // );
 
-    this.dataSource = this.arrayDatos;
-    this.dataSource._updateChangeSubscription();
+      //MODIFICAR ICONO
+      let indice: any = this.arrayDatos.findIndex((d: any) => d.id_srv == datos.id_srv);
+      this.arrayDatos[indice]['stat_srv'] = idestado;
+      this.dataSource = new MatTableDataSource<any>(this.arrayDatos);
+      this.dataSource._updateChangeSubscription();
+      this.LoadingStatus = false;
+    } else {
+      this.LoadingStatus = false;
+    }
+
+
   }
 
+  openBottomSheet(): void {
+    this._bottomSheet.open(AlertaPreguntaCerradaComponent);
+  }
 }

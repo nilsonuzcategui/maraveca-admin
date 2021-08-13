@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ClientesService } from 'src/app/_servicios/clientes.service';
 import { PlanesService } from 'src/app/_servicios/planes.service';
+import { ServiciosService } from 'src/app/_servicios/servicios.service';
 
 @Component({
   selector: 'app-popup-editar-servicio',
@@ -18,6 +19,9 @@ export class PopupEditarServicioComponent implements OnInit {
 
   arrayPlan = [];
   arrayCajas = [];
+  arrayEquipos = [];
+  arrayCeldas = [];
+  arraySeriales = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any,
@@ -25,7 +29,8 @@ export class PopupEditarServicioComponent implements OnInit {
     private MatDialogRef: MatDialogRef<PopupEditarServicioComponent>,
     private _snackBar: MatSnackBar,
     private _cliente: ClientesService,
-    private _planes: PlanesService
+    private _planes: PlanesService,
+    private _servicios: ServiciosService
   ) { }
 
   ngOnInit(): void {
@@ -59,11 +64,17 @@ export class PopupEditarServicioComponent implements OnInit {
       start_srv: [data.start_srv],
       id_srv: [data.id_srv] //id del servicio
     });
-    this.cambiandoTipoPlan(this.data.tipo_plan);
-
+    
+    //obtener para que el formulario sirva
+    this.obtenerEquipos(this.data.tipo_srv);
+    this.obtenerCeldas();
     if(data.tipo_srv == 2){
       this.obtenerCajas();
     }
+
+    //eventos de cambios
+    this.cambiandoTipoPlan(this.data.tipo_plan);
+    this.cambiandoEquipo(this.data.nombre_equipo);
   }
 
   ngOnDestroy(){
@@ -73,13 +84,31 @@ export class PopupEditarServicioComponent implements OnInit {
   obtenerCajas(){
     this._planes.traerCajaDistribucion().subscribe(
       (res: any) => {
-        this.arrayCajas = res['cuerpo'];
-        console.log(res);
-        
+        this.arrayCajas = res['cuerpo'];        
       },(err: any) => {
         console.log(err);
       },() => {
         this.loadingForm = false;
+      }
+    );
+  }
+
+  obtenerCeldas(){
+    this._servicios.obtenerCeldasPractica().subscribe(
+      (res: any) => {
+        this.arrayCeldas = res['cuerpo'];        
+      },(err: any) => {
+        console.log(err);
+      }
+    );
+  }
+
+  obtenerEquipos(tipoServicio: number){
+    this._servicios.obtenerEquiposInstalacion(tipoServicio).subscribe(
+      (res: any) => {
+        this.arrayEquipos = res['cuerpo'];
+      }, (err: any) => {
+        console.log(err);
       }
     );
   }
@@ -101,6 +130,89 @@ export class PopupEditarServicioComponent implements OnInit {
         this.loadingForm = false;
       }
     );
+  }
+
+  cambiandoEquipo(e: any){ //obtener seriales
+    let nombreEquipo;
+    if(e['value']){
+      nombreEquipo = e['value'];
+    }else{
+      nombreEquipo = e;
+    }
+    let apSeleccionada: any;
+    let equipoSeleccionado: any;
+    let celdaSeleccionada: any;
+    let zoneSeleccionada: any;
+
+    if(this.data['tipo_srv'] == 1){ //inalambrico
+      apSeleccionada = this.data['ap_srv'];
+      equipoSeleccionado = nombreEquipo;
+
+      this.arrayCeldas.forEach((element: any) => {
+        if (element.id_celda == this.data["celda_ap"]) {
+          celdaSeleccionada = element.id_celda
+        }
+      });
+
+      if(
+        celdaSeleccionada==16 || celdaSeleccionada==17 || celdaSeleccionada==18 || celdaSeleccionada==19 || celdaSeleccionada==20 || celdaSeleccionada==21 ||
+        celdaSeleccionada==22 || celdaSeleccionada==30 || celdaSeleccionada==32 || celdaSeleccionada==34 || celdaSeleccionada==37
+        ){
+          zoneSeleccionada = 1;
+      }
+
+      if(
+        celdaSeleccionada==3 || celdaSeleccionada==6 || celdaSeleccionada==7 || celdaSeleccionada==8 || celdaSeleccionada==9 || celdaSeleccionada==10 ||
+        celdaSeleccionada==11 || celdaSeleccionada==12 || celdaSeleccionada==15 || celdaSeleccionada==28
+        ){
+          zoneSeleccionada = 3;
+      }
+
+      if(
+        celdaSeleccionada==14 || celdaSeleccionada==24 || celdaSeleccionada==25 || celdaSeleccionada==29
+        ){
+          zoneSeleccionada = 2;
+      }
+
+      if(
+        celdaSeleccionada==2 || celdaSeleccionada==4 || celdaSeleccionada==5 || celdaSeleccionada==13 || celdaSeleccionada==31 || celdaSeleccionada==40 ||
+        celdaSeleccionada==41
+        ){
+          zoneSeleccionada = 4;
+      }
+
+      if(
+        celdaSeleccionada==35 || celdaSeleccionada==36 || celdaSeleccionada==39
+        ){
+          zoneSeleccionada = 5;
+      }
+      
+      // console.log('zona por inalambrico --> ',zoneSeleccionada);
+      // console.log('celda por inalambrico --> ',zoneSeleccionada);
+
+    }else{ //fibre
+      zoneSeleccionada = this.data["zona_caja"];
+      equipoSeleccionado = nombreEquipo;
+
+      console.log('zona por fibra --> ',zoneSeleccionada);
+    }
+
+    //consulta a la BD
+    
+
+
+    // this._servicios.seeeriiiaallleesss(zoneSeleccionada, equipoSeleccionado).subscribe(
+    //   (res: any) => {
+    //     console.log('seriales -> ',res['cuerpo']);
+        
+    //     this.arraySeriales = res['cuerpo'];
+    //   }, (err: any) => {
+    //     console.log(err);
+    //   },() => {
+    //     console.log('zona pasada al http --> ',zoneSeleccionada);
+        
+    //   }
+    // );
   }
 
   submitForm(){
