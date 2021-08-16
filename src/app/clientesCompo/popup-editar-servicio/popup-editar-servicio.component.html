@@ -75,7 +75,7 @@
     <mat-form-field class="col-md-4">
         <mat-label>Serial</mat-label>
         <mat-select formControlName="serial_srv">
-            <mat-option value="">Seleccione</mat-option>
+            <mat-option [value]="data['serial_srv']">{{ data['serial_srv'] }} (Actual)</mat-option>
             <mat-option *ngFor="let s of arraySeriales" [value]="s['serial_articulo']">{{ s['serial_articulo'] }}</mat-option>
         </mat-select>
     </mat-form-field>
@@ -83,8 +83,8 @@
 
     <div class="col-12 mt-3 text-center">
         <mat-progress-bar *ngIf="loadingForm" mode="indeterminate"></mat-progress-bar>
-        <div class="example-button-row" *ngIf="!loadingForm">
-            <button mat-raised-button type="button">Cancelar</button>
+        <div class="example-button-row" *ngIf="!loadingForm" style="display: block;">
+            <button mat-raised-button type="button" (click)="ngOnDestroy()">Cancelar</button>
             <button mat-raised-button color="primary" type="submit">Guardar</button>
         </div>
     </div>

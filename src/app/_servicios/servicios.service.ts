@@ -60,9 +60,7 @@ export class ServiciosService {
     return this.http.post(this.loginS.API_URI2+'servicios.php',{
       opt: 'obtener_seriales_equipos',
       idzona: idZona,
-      idzonaa: '123123',
-      modelo: modelo,
-      test: idZona
+      modelo: modelo
     });
   }
 }

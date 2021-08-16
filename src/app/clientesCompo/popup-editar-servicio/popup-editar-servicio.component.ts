@@ -74,7 +74,7 @@ export class PopupEditarServicioComponent implements OnInit {
 
     //eventos de cambios
     this.cambiandoTipoPlan(this.data.tipo_plan);
-    this.cambiandoEquipo(this.data.nombre_equipo);
+
   }
 
   ngOnDestroy(){
@@ -96,7 +96,8 @@ export class PopupEditarServicioComponent implements OnInit {
   obtenerCeldas(){
     this._servicios.obtenerCeldasPractica().subscribe(
       (res: any) => {
-        this.arrayCeldas = res['cuerpo'];        
+        this.arrayCeldas = res['cuerpo'];
+        this.cambiandoEquipo(this.data.nombre_equipo);     
       },(err: any) => {
         console.log(err);
       }
@@ -186,9 +187,6 @@ export class PopupEditarServicioComponent implements OnInit {
         ){
           zoneSeleccionada = 5;
       }
-      
-      // console.log('zona por inalambrico --> ',zoneSeleccionada);
-      // console.log('celda por inalambrico --> ',zoneSeleccionada);
 
     }else{ //fibre
       zoneSeleccionada = this.data["zona_caja"];
@@ -197,22 +195,21 @@ export class PopupEditarServicioComponent implements OnInit {
       console.log('zona por fibra --> ',zoneSeleccionada);
     }
 
+
+    console.log('zona por inalambrico --> ',zoneSeleccionada);
+    console.log('celda por inalambrico --> ',celdaSeleccionada);
+
     //consulta a la BD
-    
-
-
-    // this._servicios.seeeriiiaallleesss(zoneSeleccionada, equipoSeleccionado).subscribe(
-    //   (res: any) => {
-    //     console.log('seriales -> ',res['cuerpo']);
+    this._servicios.seeeriiiaallleesss(zoneSeleccionada, equipoSeleccionado).subscribe(
+      (res: any) => {
+        this.arraySeriales = res['cuerpo'];
+      }, (err: any) => {
+        console.log(err);
+      },() => {
+        console.log('zona pasada al http --> ',zoneSeleccionada);
         
-    //     this.arraySeriales = res['cuerpo'];
-    //   }, (err: any) => {
-    //     console.log(err);
-    //   },() => {
-    //     console.log('zona pasada al http --> ',zoneSeleccionada);
-        
-    //   }
-    // );
+      }
+    );
   }
 
   submitForm(){

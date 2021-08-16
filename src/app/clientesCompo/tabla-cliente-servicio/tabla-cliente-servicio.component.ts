@@ -80,22 +80,23 @@ export class TablaClienteServicioComponent implements OnInit {
 
     var r = confirm("¿Seguro que quiere cambiar el estado del servicio ?");
     if (r == true) {
-      // this._servicios.modificarEstadoServicio(idServicio, ipServicio, idestado, tipo_srv, ip_api, userMK, passMK).subscribe(
-      //   (res: any) => {
-      //     console.log(res);
-      //   },(err: any) => {
-      //     console.log(err);
-      //   },() => {
-      //     this.LoadingStatus = false;
-      //   }
-      // );
+      this._servicios.modificarEstadoServicio(idServicio, ipServicio, idestado, tipo_srv, ip_api, userMK, passMK).subscribe(
+        (res: any) => {
+          console.log(res);
+          //MODIFICAR ICONO
+          let indice: any = this.arrayDatos.findIndex((d: any) => d.id_srv == datos.id_srv);
+          this.arrayDatos[indice]['stat_srv'] = idestado;
+          this.dataSource = new MatTableDataSource<any>(this.arrayDatos);
+          this.dataSource._updateChangeSubscription();
+          this.LoadingStatus = false;
+        },(err: any) => {
+          console.log(err);
+        },() => {
+          this.LoadingStatus = false;
+        }
+      );
 
-      //MODIFICAR ICONO
-      let indice: any = this.arrayDatos.findIndex((d: any) => d.id_srv == datos.id_srv);
-      this.arrayDatos[indice]['stat_srv'] = idestado;
-      this.dataSource = new MatTableDataSource<any>(this.arrayDatos);
-      this.dataSource._updateChangeSubscription();
-      this.LoadingStatus = false;
+      
     } else {
       this.LoadingStatus = false;
     }

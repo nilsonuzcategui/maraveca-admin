@@ -10,7 +10,14 @@
         <div *ngIf="column == 'direccion'" class="text-end"> Acciones</div>
       </th>
       <td mat-cell *matCellDef="let element" class="c-pointer">
-        <div *ngIf="column != 'direccion'"> {{element[column]}} </div>
+        <div *ngIf="column == 'id_srv'"> {{element[column]}}</div>
+        <div *ngIf="column == 'name_plan'"> 
+
+          <mat-icon class="icono-servicio" *ngIf="element['tipo_srv'] == 1">wifi_tethering</mat-icon>
+          <mat-icon class="icono-servicio" *ngIf="element['tipo_srv'] == 2">timeline</mat-icon>
+          <span>{{element[column]}}</span>
+          
+        </div>
         <div *ngIf="column == 'direccion'" class="text-end">
 
           <div style="display: flex;justify-content: space-between;">
