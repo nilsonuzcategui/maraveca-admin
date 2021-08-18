@@ -27,6 +27,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs, 'es');
@@ -118,7 +119,8 @@ import { AlertaPreguntaCerradaComponent } from './componentes/alerta-pregunta-ce
     MatSnackBarModule,
     MatTabsModule,
     MatExpansionModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatSlideToggleModule
   ],
   providers: [ { provide: LOCALE_ID, useValue: 'es' } ],
   bootstrap: [AppComponent]

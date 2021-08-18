@@ -64,7 +64,7 @@
     </mat-form-field>
     <!--FIN DE MOSTRAR IP O CAJA DE DISTRIBUCIÓN -->
 
-    <mat-form-field class="col-md-4">
+    <mat-form-field class="col-md-4" [ngClass]="{'col-md-6': data.tipo_srv == 2}">
         <mat-label>Equipo</mat-label>
         <mat-select formControlName="nombre_equipo" (selectionChange)="cambiandoEquipo($event)">
             <mat-option value="">Seleccione</mat-option>
@@ -72,13 +72,77 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field class="col-md-4">
+    <mat-form-field class="col-md-4" [ngClass]="{'col-md-6': data.tipo_srv == 2}">
         <mat-label>Serial</mat-label>
         <mat-select formControlName="serial_srv">
             <mat-option [value]="data['serial_srv']">{{ data['serial_srv'] }} (Actual)</mat-option>
             <mat-option *ngFor="let s of arraySeriales" [value]="s['serial_articulo']">{{ s['serial_articulo'] }}</mat-option>
         </mat-select>
     </mat-form-field>
+
+    <mat-form-field class="col-md-4" *ngIf="data.tipo_srv == 1">
+        <mat-label>Ap</mat-label>
+        <mat-select formControlName="ap_srv">
+            <mat-option value="">Seleccionar</mat-option>
+            <mat-option *ngFor="let a of arrayAps" [value]="a['id']">{{ a['nombre_ap'] }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-12" *ngIf="data.tipo_srv == 2">
+        <mat-label>Mnaga Empalme</mat-label>
+        <input matInput formControlName="nombre_manga">
+    </mat-form-field>
+
+    <div class="col-md-4" style="padding-top: 16px;">
+        <mat-slide-toggle
+          class="example-margin"
+          [checked]="checked"
+          [(ngModel)]="checked"
+          [ngModelOptions]="{standalone: true}"
+          >
+        Genera Comisión
+      </mat-slide-toggle>
+    </div>
+
+    <mat-form-field class="col-md-4" *ngIf="checked" style="background-color: #ff408114;">
+        <mat-label>Usuario</mat-label>
+        <mat-select formControlName="user_comision_serv">
+            <mat-option value="">Seleccionar</mat-option>
+            <mat-option *ngFor="let user of arrayUsuariosComisiones" [value]="user['id_user']">{{ user['nombre_user'] }} {{ user['apellido_user'] }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4" *ngIf="checked" style="background-color: #ff408114;">
+        <mat-label>Comisión %</mat-label>
+        <input matInput name="porcentaje_comision_serv" formControlName="porcentaje_comision_serv" type="number" min="0" max="100">
+    </mat-form-field>
+
+    
+    <mat-form-field class="col-md-4">
+        <mat-label>Comentario</mat-label>
+        <input matInput name="comentario" formControlName="comment_srv">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Costo Instalación</mat-label>
+        <input matInput name="costo_instalacion_srv" formControlName="costo_instalacion_srv">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Días de Credito</mat-label>
+        <input matInput name="credito_srv" formControlName="credito_srv">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Fecha Instalación</mat-label>
+        <input type="date" name="instalacion_srv" matInput formControlName="instalacion_srv">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-4">
+        <mat-label>Fecha Inicio Servicio</mat-label>
+        <input type="date" name="start_srv" matInput formControlName="start_srv">
+    </mat-form-field>
+    
 
 
     <div class="col-12 mt-3 text-center">

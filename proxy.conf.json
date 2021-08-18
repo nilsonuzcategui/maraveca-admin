@@ -1,0 +1,7 @@
+{
+    "/api/*":{
+        "target" : "https://api.maraveca.net",
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

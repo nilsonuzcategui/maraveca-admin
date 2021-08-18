@@ -16,12 +16,15 @@ export class PopupEditarServicioComponent implements OnInit {
   groupForm = this.formBuilder.group({});
 
   loadingForm: boolean = true;
+  checked: boolean = false;
 
   arrayPlan = [];
   arrayCajas = [];
   arrayEquipos = [];
   arrayCeldas = [];
   arraySeriales = [];
+  arrayAps = [];
+  arrayUsuariosComisiones = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data:any,
@@ -50,11 +53,11 @@ export class PopupEditarServicioComponent implements OnInit {
       name_plan: [data.name_plan, Validators.required],
       ip_srv: [{value: data.ip_srv, disabled: true}],
       nombre_caja: [data.nombre_caja],
-      ap_srv: [data.ap_srv], //servicio Fibra
+      ap_srv: [data.ap_srv],
       nombre_equipo: [data.nombre_equipo],
       serial_srv: [data.serial_srv],
       nombre_ap: [data.nombre_ap],
-      nombre_manga: [data.nombre_manga],
+      nombre_manga: [{value: data.nombre_manga, disabled: true}],
       user_comision_serv: [data.user_comision_serv],
       porcentaje_comision_serv: [data.porcentaje_comision_serv],
       comment_srv: [data.comment_srv],
@@ -68,13 +71,22 @@ export class PopupEditarServicioComponent implements OnInit {
     //obtener para que el formulario sirva
     this.obtenerEquipos(this.data.tipo_srv);
     this.obtenerCeldas();
+    this.obtenerUsuariosComisiones();
     if(data.tipo_srv == 2){
       this.obtenerCajas();
+    }else{
+      this.obtenerAps();
     }
 
     //eventos de cambios
     this.cambiandoTipoPlan(this.data.tipo_plan);
 
+    //activar Check si tiene usuario para comisiones
+    if (this.data.user_comision_serv == '' || this.data.user_comision_serv == null) {
+      this.checked = false;
+    }else{
+      this.checked = true;
+    }
   }
 
   ngOnDestroy(){
@@ -113,6 +125,28 @@ export class PopupEditarServicioComponent implements OnInit {
       }
     );
   }
+
+  obtenerAps(){
+    this._servicios.obtenerApsPractica().subscribe(
+      (res: any) => {
+        this.arrayAps = res['cuerpo'];
+      }, (err: any) => {
+        console.log(err);
+      }
+    );
+  }
+
+  obtenerUsuariosComisiones(){
+    this._servicios.obtenerUsuariosComisiones().subscribe(
+      (res: any) => {
+        this.arrayUsuariosComisiones = res['cuerpo'];
+        console.log(this.arrayAps);
+      }, (err: any) => {
+        console.log(err);
+      }
+    );
+  }
+
 
   cambiandoTipoPlan(e: any){
     this.loadingForm = true;
@@ -192,12 +226,8 @@ export class PopupEditarServicioComponent implements OnInit {
       zoneSeleccionada = this.data["zona_caja"];
       equipoSeleccionado = nombreEquipo;
 
-      console.log('zona por fibra --> ',zoneSeleccionada);
+      
     }
-
-
-    console.log('zona por inalambrico --> ',zoneSeleccionada);
-    console.log('celda por inalambrico --> ',celdaSeleccionada);
 
     //consulta a la BD
     this._servicios.seeeriiiaallleesss(zoneSeleccionada, equipoSeleccionado).subscribe(
@@ -205,9 +235,6 @@ export class PopupEditarServicioComponent implements OnInit {
         this.arraySeriales = res['cuerpo'];
       }, (err: any) => {
         console.log(err);
-      },() => {
-        console.log('zona pasada al http --> ',zoneSeleccionada);
-        
       }
     );
   }

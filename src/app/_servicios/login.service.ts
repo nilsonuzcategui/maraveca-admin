@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +7,14 @@ import { map } from "rxjs/operators";
 export class LoginService {
 
   //LOCALHOST
-  // API_URI = 'http://127.0.0.1:8000/api/';
-  // API_URI2 = 'http://localhost/maraveca-api/';
+  API_URI = 'http://127.0.0.1:8000/api/';
+  API_URI2 = 'http://localhost/maraveca-api/';
 
-  //EXTERNO
-  API_URI = 'http://sa.maraveca.net/maraveca/public/index.php/api/';
-  API_URI2 = 'https://facturacion.maraveca.net/api/';
+  //EXTERNO - PRUEBAS
+  // API_URI = 'https://api.maraveca.net/sa/maraveca/public/index.php/api/';
+  // API_URI2 = 'https://api.maraveca.net/sa/api-facturacion/';
+
+  //EXTERNO - OFICIAL
 
   constructor(
     private http: HttpClient

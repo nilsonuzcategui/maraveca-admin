@@ -63,4 +63,18 @@ export class ServiciosService {
       modelo: modelo
     });
   }
+
+  obtenerApsPractica():Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'servicios.php',{
+      opt: 'obtener_aps'
+    });
+  }
+
+  obtenerUsuariosComisiones():Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'servicios.php',{
+      opt: 'obtener_usuarios_comisiones'
+    });
+  }
+
+
 }
