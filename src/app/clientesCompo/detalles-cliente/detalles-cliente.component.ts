@@ -371,6 +371,24 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
     // console.log('balc in ->', this.balac_in);
   } //fin funcion
 
+
+  exitoEditarServicio(e :any){
+    if (e) {
+      this.expandedServicios = false;
+      this.loading = true;
+      this._clientes.obtenerServiciosClientes2(this.idcliente).subscribe(
+        (res: any) => {
+          this.servicios = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
+          this.numServicios = res['cuerpo'].length;
+          this.expandedServicios = true;
+          this.loading = false;
+        }, (err: any) => {
+          console.log(err);
+        }
+      );
+    }
+  }
+
   ngOnDestroy() {
     if (this.peticionHttp) {
       this.peticionHttp.unsubscribe();

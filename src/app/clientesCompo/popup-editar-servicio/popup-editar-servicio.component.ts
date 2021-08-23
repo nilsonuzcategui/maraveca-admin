@@ -17,6 +17,7 @@ export class PopupEditarServicioComponent implements OnInit {
 
   loadingForm: boolean = true;
   checked: boolean = false;
+  editadoExito: boolean = false;
 
   arrayPlan = [];
   arrayCajas = [];
@@ -27,7 +28,7 @@ export class PopupEditarServicioComponent implements OnInit {
   arrayUsuariosComisiones = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data:any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private MatDialogRef: MatDialogRef<PopupEditarServicioComponent>,
     private _snackBar: MatSnackBar,
@@ -37,9 +38,14 @@ export class PopupEditarServicioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data);
-    let data = this.data
+    //datos de la sesion activa
+    let userData = JSON.parse(<any>localStorage.getItem('currentUser'));
+    //seteo de formulario
+    let data = this.data;
+    
     this.groupForm = this.formBuilder.group({
+      opt: ['editar_servicio'],
+      id_usuario: [userData['id_user'], Validators.required], //usuario que realiza la edicion
       cliente_srv: [data.cliente_srv, Validators.required],
       kind: [data.kind, Validators.required],
       nombre: [data.nombre, Validators.required],
@@ -51,13 +57,14 @@ export class PopupEditarServicioComponent implements OnInit {
       tipo_plan: [data.tipo_plan, Validators.required], //plan de megas del servicio
       tipo_srv: [data.tipo_srv, Validators.required], //si es fibra o normal
       name_plan: [data.name_plan, Validators.required],
-      ip_srv: [{value: data.ip_srv, disabled: true}],
+      ip_srv: [{ value: data.ip_srv, disabled: true }],
       nombre_caja: [data.nombre_caja],
       ap_srv: [data.ap_srv],
       nombre_equipo: [data.nombre_equipo],
       serial_srv: [data.serial_srv],
       nombre_ap: [data.nombre_ap],
-      nombre_manga: [{value: data.nombre_manga, disabled: true}],
+      nombre_manga: [{ value: data.nombre_manga, disabled: true }],
+      gen_comision_serv: [data.gen_comision_serv], //boolean
       user_comision_serv: [data.user_comision_serv],
       porcentaje_comision_serv: [data.porcentaje_comision_serv],
       comment_srv: [data.comment_srv],
@@ -67,14 +74,17 @@ export class PopupEditarServicioComponent implements OnInit {
       start_srv: [data.start_srv],
       id_srv: [data.id_srv] //id del servicio
     });
+
+    console.log(data);
     
+
     //obtener para que el formulario sirva
     this.obtenerEquipos(this.data.tipo_srv);
     this.obtenerCeldas();
     this.obtenerUsuariosComisiones();
-    if(data.tipo_srv == 2){
+    if (data.tipo_srv == 2) {
       this.obtenerCajas();
-    }else{
+    } else {
       this.obtenerAps();
     }
 
@@ -82,41 +92,41 @@ export class PopupEditarServicioComponent implements OnInit {
     this.cambiandoTipoPlan(this.data.tipo_plan);
 
     //activar Check si tiene usuario para comisiones
-    if (this.data.user_comision_serv == '' || this.data.user_comision_serv == null) {
-      this.checked = false;
-    }else{
+    if (this.data.gen_comision_serv == 1 || this.data.gen_comision_serv == '1') {
       this.checked = true;
+    } else {
+      this.checked = false;
     }
   }
 
-  ngOnDestroy(){
-    this.MatDialogRef.close(this.groupForm.value);
+  ngOnDestroy() {
+    this.MatDialogRef.close(this.editadoExito);
   }
 
-  obtenerCajas(){
+  obtenerCajas() {
     this._planes.traerCajaDistribucion().subscribe(
       (res: any) => {
-        this.arrayCajas = res['cuerpo'];        
-      },(err: any) => {
+        this.arrayCajas = res['cuerpo'];
+      }, (err: any) => {
         console.log(err);
-      },() => {
+      }, () => {
         this.loadingForm = false;
       }
     );
   }
 
-  obtenerCeldas(){
+  obtenerCeldas() {
     this._servicios.obtenerCeldasPractica().subscribe(
       (res: any) => {
         this.arrayCeldas = res['cuerpo'];
-        this.cambiandoEquipo(this.data.nombre_equipo);     
-      },(err: any) => {
+        this.cambiandoEquipo(this.data.nombre_equipo);
+      }, (err: any) => {
         console.log(err);
       }
     );
   }
 
-  obtenerEquipos(tipoServicio: number){
+  obtenerEquipos(tipoServicio: number) {
     this._servicios.obtenerEquiposInstalacion(tipoServicio).subscribe(
       (res: any) => {
         this.arrayEquipos = res['cuerpo'];
@@ -126,7 +136,7 @@ export class PopupEditarServicioComponent implements OnInit {
     );
   }
 
-  obtenerAps(){
+  obtenerAps() {
     this._servicios.obtenerApsPractica().subscribe(
       (res: any) => {
         this.arrayAps = res['cuerpo'];
@@ -136,11 +146,10 @@ export class PopupEditarServicioComponent implements OnInit {
     );
   }
 
-  obtenerUsuariosComisiones(){
+  obtenerUsuariosComisiones() {
     this._servicios.obtenerUsuariosComisiones().subscribe(
       (res: any) => {
         this.arrayUsuariosComisiones = res['cuerpo'];
-        console.log(this.arrayAps);
       }, (err: any) => {
         console.log(err);
       }
@@ -148,30 +157,42 @@ export class PopupEditarServicioComponent implements OnInit {
   }
 
 
-  cambiandoTipoPlan(e: any){
+  cambiandoTipoPlan(e: any) {
     this.loadingForm = true;
     let tipoPlan;
-    if(e['value']){
+    if (e['value']) {
       tipoPlan = e['value'];
-    }else{
+    } else {
       tipoPlan = e;
     }
     this._planes.obtenerPlanes(tipoPlan).subscribe(
       (res: any) => {
         this.arrayPlan = res['cuerpo'];
-      },(err: any) => {
+      }, (err: any) => {
         console.log(err);
-      },() => {
+      }, () => {
         this.loadingForm = false;
       }
     );
   }
 
-  cambiandoEquipo(e: any){ //obtener seriales
-    let nombreEquipo;
-    if(e['value']){
-      nombreEquipo = e['value'];
+  ToogleComision(e: any){
+    this.checked = e.checked;
+    if (this.checked) {
+      this.groupForm.controls['gen_comision_serv'].setValue(1);
     }else{
+      this.groupForm.controls['gen_comision_serv'].setValue(0);
+      this.groupForm.controls['user_comision_serv'].setValue('');
+      this.groupForm.controls['porcentaje_comision_serv'].setValue(0);
+    }
+    
+  }
+
+  cambiandoEquipo(e: any) { //obtener seriales
+    let nombreEquipo;
+    if (e['value']) {
+      nombreEquipo = e['value'];
+    } else {
       nombreEquipo = e;
     }
     let apSeleccionada: any;
@@ -179,7 +200,7 @@ export class PopupEditarServicioComponent implements OnInit {
     let celdaSeleccionada: any;
     let zoneSeleccionada: any;
 
-    if(this.data['tipo_srv'] == 1){ //inalambrico
+    if (this.data['tipo_srv'] == 1) { //inalambrico
       apSeleccionada = this.data['ap_srv'];
       equipoSeleccionado = nombreEquipo;
 
@@ -189,44 +210,44 @@ export class PopupEditarServicioComponent implements OnInit {
         }
       });
 
-      if(
-        celdaSeleccionada==16 || celdaSeleccionada==17 || celdaSeleccionada==18 || celdaSeleccionada==19 || celdaSeleccionada==20 || celdaSeleccionada==21 ||
-        celdaSeleccionada==22 || celdaSeleccionada==30 || celdaSeleccionada==32 || celdaSeleccionada==34 || celdaSeleccionada==37
-        ){
-          zoneSeleccionada = 1;
+      if (
+        celdaSeleccionada == 16 || celdaSeleccionada == 17 || celdaSeleccionada == 18 || celdaSeleccionada == 19 || celdaSeleccionada == 20 || celdaSeleccionada == 21 ||
+        celdaSeleccionada == 22 || celdaSeleccionada == 30 || celdaSeleccionada == 32 || celdaSeleccionada == 34 || celdaSeleccionada == 37
+      ) {
+        zoneSeleccionada = 1;
       }
 
-      if(
-        celdaSeleccionada==3 || celdaSeleccionada==6 || celdaSeleccionada==7 || celdaSeleccionada==8 || celdaSeleccionada==9 || celdaSeleccionada==10 ||
-        celdaSeleccionada==11 || celdaSeleccionada==12 || celdaSeleccionada==15 || celdaSeleccionada==28
-        ){
-          zoneSeleccionada = 3;
+      if (
+        celdaSeleccionada == 3 || celdaSeleccionada == 6 || celdaSeleccionada == 7 || celdaSeleccionada == 8 || celdaSeleccionada == 9 || celdaSeleccionada == 10 ||
+        celdaSeleccionada == 11 || celdaSeleccionada == 12 || celdaSeleccionada == 15 || celdaSeleccionada == 28
+      ) {
+        zoneSeleccionada = 3;
       }
 
-      if(
-        celdaSeleccionada==14 || celdaSeleccionada==24 || celdaSeleccionada==25 || celdaSeleccionada==29
-        ){
-          zoneSeleccionada = 2;
+      if (
+        celdaSeleccionada == 14 || celdaSeleccionada == 24 || celdaSeleccionada == 25 || celdaSeleccionada == 29
+      ) {
+        zoneSeleccionada = 2;
       }
 
-      if(
-        celdaSeleccionada==2 || celdaSeleccionada==4 || celdaSeleccionada==5 || celdaSeleccionada==13 || celdaSeleccionada==31 || celdaSeleccionada==40 ||
-        celdaSeleccionada==41
-        ){
-          zoneSeleccionada = 4;
+      if (
+        celdaSeleccionada == 2 || celdaSeleccionada == 4 || celdaSeleccionada == 5 || celdaSeleccionada == 13 || celdaSeleccionada == 31 || celdaSeleccionada == 40 ||
+        celdaSeleccionada == 41
+      ) {
+        zoneSeleccionada = 4;
       }
 
-      if(
-        celdaSeleccionada==35 || celdaSeleccionada==36 || celdaSeleccionada==39
-        ){
-          zoneSeleccionada = 5;
+      if (
+        celdaSeleccionada == 35 || celdaSeleccionada == 36 || celdaSeleccionada == 39
+      ) {
+        zoneSeleccionada = 5;
       }
 
-    }else{ //fibre
+    } else { //fibre
       zoneSeleccionada = this.data["zona_caja"];
       equipoSeleccionado = nombreEquipo;
 
-      
+
     }
 
     //consulta a la BD
@@ -239,8 +260,23 @@ export class PopupEditarServicioComponent implements OnInit {
     );
   }
 
-  submitForm(){
-    alert('submit');
+  submitForm() {
+    console.log(this.groupForm.value);
+    this.loadingForm = true;
+    this._servicios.editarServicioGeneral(this.groupForm.value).subscribe(
+      (res: any) => {
+        if(res['respuesta'] == 'exito'){
+          this.editadoExito = true;
+          this._snackBar.open('Servicio editado con exito', 'ok',{duration: 3000});
+          this.ngOnDestroy();
+        }
+      }, (err: any) => {
+        console.log(err);
+        this._snackBar.open('Error al editar el servicio', 'ok',{duration: 3000});
+      }, () => {
+        this.loadingForm = false;
+      }
+    );
   }
 
 }

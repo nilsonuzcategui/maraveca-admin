@@ -99,6 +99,7 @@
           [checked]="checked"
           [(ngModel)]="checked"
           [ngModelOptions]="{standalone: true}"
+          (change)="ToogleComision($event)"
           >
         Genera Comisión
       </mat-slide-toggle>

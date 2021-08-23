@@ -77,4 +77,9 @@ export class ServiciosService {
   }
 
 
+  editarServicioGeneral(datosForm: any):Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'servicios.php', datosForm);
+  }
+
+
 }

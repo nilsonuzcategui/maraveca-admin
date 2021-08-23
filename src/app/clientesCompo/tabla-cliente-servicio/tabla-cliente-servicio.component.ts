@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -27,6 +27,8 @@ export class TablaClienteServicioComponent implements OnInit {
   expandedElement: any;
   columnsToDisplay = ['id_srv', 'name_plan', 'direccion'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
+
+  @Output() exitoEnEditar = new EventEmitter<boolean>();
 
   LoadingStatus: boolean = false;
 
@@ -59,9 +61,10 @@ export class TablaClienteServicioComponent implements OnInit {
       });
 
     dialogRef.afterClosed().subscribe(
-      result => {
-        console.log(result);
-
+      (result: boolean) => {
+        if (result) { //Actualizar tabla Servicio
+          this.exitoEnEditar.emit(result);
+        }
       }
     );
   }
@@ -82,7 +85,6 @@ export class TablaClienteServicioComponent implements OnInit {
     if (r == true) {
       this._servicios.modificarEstadoServicio(idServicio, ipServicio, idestado, tipo_srv, ip_api, userMK, passMK).subscribe(
         (res: any) => {
-          console.log(res);
           //MODIFICAR ICONO
           let indice: any = this.arrayDatos.findIndex((d: any) => d.id_srv == datos.id_srv);
           this.arrayDatos[indice]['stat_srv'] = idestado;
