@@ -1,43 +1,53 @@
 <h5>Cargar Pago</h5>
 <hr>
-<form class="example-container row" [formGroup]="groupForm">
+<div class="example-container row">
     <mat-form-field class="col-md-6">
         <mat-label>Metodo de Pago *</mat-label>
-        <mat-select>
-            <mat-option value="1">Transferencia BOD</mat-option>
-            <mat-option value="1">Transferencia Banesco</mat-option>
-            <mat-option value="1">Transferencia Venezuela</mat-option>
-            <mat-option value="1">Transferencia Bicentenario</mat-option>
-            <mat-option value="0">Zelle</mat-option>
-            <mat-option value="0">Wire Transfer</mat-option>
-            <mat-option value="0">Efectivo $</mat-option>
-            <mat-option value="0">Banesco Panama</mat-option>
-            <mat-option value="0">Descuento</mat-option>
+        <mat-select [(ngModel)]="metodoDePago">
+            <mat-option *ngFor="let m of arrayMetodos" [value]="m['id_metodo']">{{ m['nombre_metodo'] }}</mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field class="col-md-6">
         <mat-label>Referencia</mat-label>
-        <input matInput>
+        <input matInput [(ngModel)]="referenciaPago">
     </mat-form-field>
 
     <mat-form-field class="col-md-6">
         <mat-label>Fecha *</mat-label>
-        <input type="date" matInput>
+        <input type="date" matInput [(ngModel)]="fechaPago">
     </mat-form-field>
 
     <mat-form-field class="col-md-6">
         <mat-label>Monto *</mat-label>
-        <input matInput type='text' mask="separator.2" thousandSeparator=".">
+        <input matInput type='text' mask="separator.2" thousandSeparator="." [(ngModel)]="MontoPago">
     </mat-form-field>
+
+    <div class="alert alert-info col-md-12" role="alert"
+        *ngIf="
+            ( metodoDePago == '1' ||
+            metodoDePago == '2' ||
+            metodoDePago == '3' ||
+            metodoDePago == '6' )
+        "
+        >
+        <div style="font-size: 12px;">
+            * Tasa Actual: {{ precioDolar | number }} Bs.
+        </div>
+        <div class="text-center" style="font-size: 14px;text-decoration: underline;">
+            <b>Conversión: {{ (MontoPago / precioDolar) | number }} $.</b>
+        </div>
+    </div>
+
+    <div class="alert alert-danger col-12" role="alert" *ngIf="errorBoolean">
+        {{ mensajeError }}
+    </div>
 
     <div class="col-12 mt-3 text-center">
         <mat-progress-bar *ngIf="loadingForm" mode="indeterminate"></mat-progress-bar>
         <div class="example-button-row" *ngIf="!loadingForm" style="display: block;">
-            <button mat-raised-button type="button" (click)="ngOnDestroy()">Cancelar</button>
-            <button mat-raised-button color="primary" type="submit">Guardar</button>
+            <button mat-raised-button type="button" (click)="ngOnDestroy()" class="me-2">Cancelar</button>
+            <button mat-raised-button type="button" color="primary" (click)="submitForm()">Guardar</button>
         </div>
     </div>
-</form>
-
-<!-- <input type='text' mask="separator.2" thousandSeparator="."/> -->
+</div>

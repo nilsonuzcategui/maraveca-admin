@@ -43,4 +43,18 @@ export class FacturacionService {
     });
   }
 
+  obtenerMetodosPagos():Observable<any[]>{
+    return this.http.post<any[]>(this.loginS.API_URI2+"facturacion.php",
+    {
+      opt: 'obtener_metodos_pagos'
+    });
+  }
+
+  obtenerPrecioDolar():Observable<any>{
+    return this.http.post(this.loginS.API_URI2+'planes.php',{
+      opt: 'obtener_precio_dolar'
+    });
+  }
+
+
 }
