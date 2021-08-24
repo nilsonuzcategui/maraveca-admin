@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { PopupGenerarFacturaComponent } from '../popup-generar-factura/popup-generar-factura.component';
 
 export interface TablaBlancesFacturables {
   bal_cli: string;
@@ -53,7 +55,9 @@ export class TablaClienteBalancesComponent implements OnInit {
 
   facturable = 0;
 
-  constructor() { }
+  constructor(
+    private MatDialog: MatDialog,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -76,6 +80,24 @@ export class TablaClienteBalancesComponent implements OnInit {
       
       this.ngAfterViewInit();
     }
+  }
+
+
+  cargarPago() {
+    let idcliente = 3376;
+    let dialogRef = this.MatDialog.open(PopupGenerarFacturaComponent,
+      {
+        width: '600px',
+        data: idcliente
+      });
+
+    dialogRef.afterClosed().subscribe(
+      (result: boolean) => {
+        if (result) { //Actualizar tabla Servicio
+          // this.exitoEnEditar.emit(result);
+        }
+      }
+    );
   }
 
 }

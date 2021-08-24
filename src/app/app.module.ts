@@ -32,6 +32,9 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs, 'es');
 
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+export let options: Partial<IConfig> | (() => Partial<IConfig>);
+
 import { LoginComponent } from './login/login.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { HeaderComponent } from './header/header.component';
@@ -57,6 +60,7 @@ import { TablaClienteTicketsComponent } from './clientesCompo/tabla-cliente-tick
 import { TicketEstadoPipe } from './pipes/ticket-estado.pipe';
 import { PopupEditarServicioComponent } from './clientesCompo/popup-editar-servicio/popup-editar-servicio.component';
 import { AlertaPreguntaCerradaComponent } from './componentes/alerta-pregunta-cerrada/alerta-pregunta-cerrada.component';
+import { PopupGenerarFacturaComponent } from './clientesCompo/popup-generar-factura/popup-generar-factura.component';
 
 
 
@@ -86,7 +90,8 @@ import { AlertaPreguntaCerradaComponent } from './componentes/alerta-pregunta-ce
     TablaClienteTicketsComponent,
     TicketEstadoPipe,
     PopupEditarServicioComponent,
-    AlertaPreguntaCerradaComponent
+    AlertaPreguntaCerradaComponent,
+    PopupGenerarFacturaComponent
   ],
   entryComponents: [
     AggClienteComponent
@@ -120,7 +125,8 @@ import { AlertaPreguntaCerradaComponent } from './componentes/alerta-pregunta-ce
     MatTabsModule,
     MatExpansionModule,
     MatBottomSheetModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    NgxMaskModule.forRoot(),
   ],
   providers: [ { provide: LOCALE_ID, useValue: 'es' } ],
   bootstrap: [AppComponent]

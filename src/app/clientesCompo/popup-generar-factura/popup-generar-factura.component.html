@@ -1,0 +1,43 @@
+<h5>Cargar Pago</h5>
+<hr>
+<form class="example-container row" [formGroup]="groupForm">
+    <mat-form-field class="col-md-6">
+        <mat-label>Metodo de Pago *</mat-label>
+        <mat-select>
+            <mat-option value="1">Transferencia BOD</mat-option>
+            <mat-option value="1">Transferencia Banesco</mat-option>
+            <mat-option value="1">Transferencia Venezuela</mat-option>
+            <mat-option value="1">Transferencia Bicentenario</mat-option>
+            <mat-option value="0">Zelle</mat-option>
+            <mat-option value="0">Wire Transfer</mat-option>
+            <mat-option value="0">Efectivo $</mat-option>
+            <mat-option value="0">Banesco Panama</mat-option>
+            <mat-option value="0">Descuento</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+        <mat-label>Referencia</mat-label>
+        <input matInput>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+        <mat-label>Fecha *</mat-label>
+        <input type="date" matInput>
+    </mat-form-field>
+
+    <mat-form-field class="col-md-6">
+        <mat-label>Monto *</mat-label>
+        <input matInput type='text' mask="separator.2" thousandSeparator=".">
+    </mat-form-field>
+
+    <div class="col-12 mt-3 text-center">
+        <mat-progress-bar *ngIf="loadingForm" mode="indeterminate"></mat-progress-bar>
+        <div class="example-button-row" *ngIf="!loadingForm" style="display: block;">
+            <button mat-raised-button type="button" (click)="ngOnDestroy()">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit">Guardar</button>
+        </div>
+    </div>
+</form>
+
+<!-- <input type='text' mask="separator.2" thousandSeparator="."/> -->
