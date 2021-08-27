@@ -77,7 +77,7 @@
             row.bal_tip_in != 13 &&
             row.bal_tip_in != 14 &&
             row.bal_tip_in != 16">
-              {{ row.conversion | number: "1.2-2" }} Bs (tasa{{ row.tasa }} Bs)
+              {{ row.conversion | number: "1.2-2" }} Bs. (tasa: {{ row.tasa | number: "1.2-2" }} Bs.)
           </span>
           <span *ngIf="
           row.bal_tip_in == 12 ||
@@ -85,13 +85,13 @@
           row.bal_tip_in == 14 ||
           row.bal_tip_in == 16 ||
           row.bal_tip_in == 18">
-            {{ row.bal_monto_in | number: "1.2" }} $
+            {{ row.bal_monto_in | number: "1.2" }} $.
           </span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="bal_comment_in">
-        <th mat-header-cell *matHeaderCellDef> Método de pago </th>
+        <th mat-header-cell *matHeaderCellDef> Referencia </th>
         <td mat-cell *matCellDef="let row">
           <span *ngIf="
           row.bal_comment_mod_in == null ||

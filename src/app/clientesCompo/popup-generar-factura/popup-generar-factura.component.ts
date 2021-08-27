@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FacturacionService } from 'src/app/_servicios/facturacion.service';
 import { DatePipe } from '@angular/common';
@@ -13,6 +13,8 @@ import { DatePipe } from '@angular/common';
 })
 export class PopupGenerarFacturaComponent implements OnInit {
 
+  idusuario: number = JSON.parse(<any>localStorage.getItem('currentUser'))['id_user'];
+
   groupForm = this.formBuilder.group({});
   //Variables para dinamismo
   loadingForm: boolean = false;
@@ -20,6 +22,7 @@ export class PopupGenerarFacturaComponent implements OnInit {
   precioDolar = 0;
   mensajeError = '';
   errorBoolean: boolean = false;
+  respuestaComponente = false;
 
   //Variables para formulario
   metodoDePago = '';
@@ -28,6 +31,7 @@ export class PopupGenerarFacturaComponent implements OnInit {
   MontoPago = 0;
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public idcliente: any,
     private formBuilder: FormBuilder,
     private MatDialogRef: MatDialogRef<PopupGenerarFacturaComponent>,
     private _snackBar: MatSnackBar,
@@ -37,10 +41,12 @@ export class PopupGenerarFacturaComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerMetodos();
+    console.log('modal ->',this.idcliente);
+    console.log('modal 2->',this.idusuario);
   }
 
   ngOnDestroy() {
-    this.MatDialogRef.close();
+    this.MatDialogRef.close(this.respuestaComponente);
   }
 
   obtenerMetodos() {
@@ -76,10 +82,33 @@ export class PopupGenerarFacturaComponent implements OnInit {
     if (this.metodoDePago != '') {
       if (this.fechaPago != '') {
         if (this.MontoPago > 0) {
-          console.log('Metodo ->', this.metodoDePago);
-          console.log('Referencia ->', this.referenciaPago);
-          console.log('Fecha ->', this.fechaPago);
-          console.log('Monto ->', this.MontoPago);
+          this.loadingForm = true;
+          let fechaAux = Math.round(new Date(""+this.fechaPago+" 08:00:00").getTime()/1000.0);
+
+          //mandar el monto correcto
+          let montoFinal = 0;
+          if (this.metodoDePago == '1' || this.metodoDePago == '2' || this.metodoDePago == '3' || this.metodoDePago == '6') {
+            montoFinal = (this.MontoPago / this.precioDolar);
+          }else{
+            montoFinal = this.MontoPago;
+          }
+
+          //REGISTRAR PAGO
+          this._facturacion.registrarPago(
+            this.metodoDePago, this.referenciaPago, fechaAux, montoFinal, this.MontoPago, this.idusuario, Number(this.idcliente)
+          ).subscribe(
+            (res: any) => {
+              console.log(res);
+              if (res['cliente']) {
+                this.respuestaComponente = true;
+                this.ngOnDestroy();
+              }
+            }, (err: any) => {
+              console.log(err);
+            }, () => {
+              this.loadingForm = false;
+            }
+          );
         }else{
           this.mensajeError = 'Es necesario una monto para procesar!';
           this.errorBoolean = true;

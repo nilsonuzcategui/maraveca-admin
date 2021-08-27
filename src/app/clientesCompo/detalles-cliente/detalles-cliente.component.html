@@ -130,7 +130,7 @@
                       <mat-icon>assignment</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
-                  <app-tabla-cliente-servicio [data]='servicios' (exitoEnEditar)="exitoEditarServicio($event)"></app-tabla-cliente-servicio>
+                  <app-tabla-cliente-servicio [data]='servicios' (exitoEnEditar)="recargarDatos($event)"></app-tabla-cliente-servicio>
                 </mat-expansion-panel>
                 
               
@@ -160,7 +160,7 @@
                   </mat-expansion-panel-header>
                   <mat-tab-group>
                     <mat-tab label="Pagos"> 
-                      <app-tabla-cliente-balances [data]='balancePagosTabla' [clienteSerie]="datosClientes"></app-tabla-cliente-balances>
+                      <app-tabla-cliente-balances [data]='balancePagosTabla' [datosClientes]="datosClientes" (exitoAlCargarPago)="recargarDatos($event)"></app-tabla-cliente-balances>
                     </mat-tab>
                     <mat-tab label="Exoneraciones">
                       <app-tabla-cliente-balance-exoneraciones [data]='balancePagosTablaExoneraciones' [clienteSerie]="datosClientes"></app-tabla-cliente-balance-exoneraciones>

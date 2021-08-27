@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Output, SimpleChanges, ViewChild, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -47,13 +47,17 @@ export interface TablaBlancesNoFacturables {
 })
 export class TablaClienteBalancesComponent implements OnInit {
   @Input() data: any;
-  @Input() clienteSerie: any;
+  @Input() datosClientes: any;
   dataSource = new MatTableDataSource<any>();
   columnasBalancesPagos: string[] = ['id_bal', 'created_at', 'bal_monto', 'bal_tip','bal_stat'];
   columnasBalancesPagos2: string[] = ['id_bal_in', 'created_at', 'bal_monto_in', 'bal_comment_in', 'bal_tip_in','bal_stat_in'];
   @ViewChild(MatPaginator) paginator: MatPaginator | any;
 
+  @Output() exitoAlCargarPago = new EventEmitter<boolean>();
+
   facturable = 0;
+
+  idcliente: number = 0;
 
   constructor(
     private MatDialog: MatDialog,
@@ -67,8 +71,8 @@ export class TablaClienteBalancesComponent implements OnInit {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if(this.clienteSerie){
-      this.facturable = this.clienteSerie['serie'];
+    if(this.datosClientes){
+      this.idcliente = this.datosClientes['id'];
     }
     
     if (changes.data) {
@@ -84,17 +88,16 @@ export class TablaClienteBalancesComponent implements OnInit {
 
 
   cargarPago() {
-    let idcliente = 3376;
     let dialogRef = this.MatDialog.open(PopupGenerarFacturaComponent,
       {
         width: '600px',
-        data: idcliente
+        data: this.idcliente
       });
 
     dialogRef.afterClosed().subscribe(
       (result: boolean) => {
-        if (result) { //Actualizar tabla Servicio
-          // this.exitoEnEditar.emit(result);
+        if (result) { //Actualizar tabla Balances
+          this.exitoAlCargarPago.emit(result);
         }
       }
     );

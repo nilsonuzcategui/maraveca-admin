@@ -15,16 +15,18 @@ export class BalTipTransformPipe implements PipeTransform {
       retorno = 'Transferencia Venezuela';
     }else if (value == 6) {
       retorno = 'Transferencia Bicentenario';
-    }else if (value == 9) {
+    }else if (value == 12) {
       retorno = 'Zelle';
-    }else if (value == 10) {
+    }else if (value == 13) {
       retorno = 'Wire Transfer';
-    }else if (value == 11) {
-      retorno = 'Efectivo en dolar $';
+    }else if (value == 14) {
+      retorno = 'Efectivo $';
     }else if (value == 18) {
       retorno = 'Banesco Panamá';
+    }else if (value == 20) {
+      retorno = 'Descuento';
     }else{
-      retorno = '';
+      retorno = 'N/A';
     }
 
   

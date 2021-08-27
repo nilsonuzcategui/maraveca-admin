@@ -28,6 +28,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import localeEs from '@angular/common/locales/es';
 registerLocaleData(localeEs, 'es');
@@ -127,8 +128,12 @@ import { PopupGenerarFacturaComponent } from './clientesCompo/popup-generar-fact
     MatBottomSheetModule,
     MatSlideToggleModule,
     NgxMaskModule.forRoot(),
+    MatDatepickerModule
   ],
-  providers: [ { provide: LOCALE_ID, useValue: 'es' } ],
+  providers: [ 
+    { provide: LOCALE_ID, useValue: 'es' },
+    MatDatepickerModule 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
