@@ -30,8 +30,12 @@ export class PopupGenerarFacturaComponent implements OnInit {
   fechaPago = this.pipes.transform(new Date(), 'yyyy-MM-dd');
   MontoPago = 0;
 
+  idcliente = this.data.datosCliente['id'];
+  clienteSerie = this.data.datosCliente['serie'];
+  tablaFacturacion = this.data.tablaFacturacion;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public idcliente: any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private MatDialogRef: MatDialogRef<PopupGenerarFacturaComponent>,
     private _snackBar: MatSnackBar,
@@ -41,8 +45,6 @@ export class PopupGenerarFacturaComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerMetodos();
-    console.log('modal ->',this.idcliente);
-    console.log('modal 2->',this.idusuario);
   }
 
   ngOnDestroy() {
@@ -94,21 +96,26 @@ export class PopupGenerarFacturaComponent implements OnInit {
           }
 
           //REGISTRAR PAGO
-          this._facturacion.registrarPago(
-            this.metodoDePago, this.referenciaPago, fechaAux, montoFinal, this.MontoPago, this.idusuario, Number(this.idcliente)
-          ).subscribe(
-            (res: any) => {
-              console.log(res);
-              if (res['cliente']) {
-                this.respuestaComponente = true;
-                this.ngOnDestroy();
+          if (this.clienteSerie == 1) {
+            alert('cleinte facturable!');
+          }else{
+            //REGISTRAR PAGO A CLIENTE NO FACTURABLE
+            this._facturacion.registrarPago(
+              this.metodoDePago, this.referenciaPago, fechaAux, montoFinal, this.MontoPago, this.idusuario, Number(this.idcliente)
+            ).subscribe(
+              (res: any) => {
+                console.log(res);
+                if (res['cliente']) {
+                  this.respuestaComponente = true;
+                  this.ngOnDestroy();
+                }
+              }, (err: any) => {
+                console.log(err);
+              }, () => {
+                this.loadingForm = false;
               }
-            }, (err: any) => {
-              console.log(err);
-            }, () => {
-              this.loadingForm = false;
-            }
-          );
+            );
+          }
         }else{
           this.mensajeError = 'Es necesario una monto para procesar!';
           this.errorBoolean = true;

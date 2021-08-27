@@ -48,6 +48,7 @@ export interface TablaBlancesNoFacturables {
 export class TablaClienteBalancesComponent implements OnInit {
   @Input() data: any;
   @Input() datosClientes: any;
+  @Input() tablaFacturas: any;
   dataSource = new MatTableDataSource<any>();
   columnasBalancesPagos: string[] = ['id_bal', 'created_at', 'bal_monto', 'bal_tip','bal_stat'];
   columnasBalancesPagos2: string[] = ['id_bal_in', 'created_at', 'bal_monto_in', 'bal_comment_in', 'bal_tip_in','bal_stat_in'];
@@ -73,11 +74,15 @@ export class TablaClienteBalancesComponent implements OnInit {
   public ngOnChanges(changes: SimpleChanges) {
     if(this.datosClientes){
       this.idcliente = this.datosClientes['id'];
+      this.facturable = this.datosClientes['serie'];
     }
     
     if (changes.data) {
       if (this.facturable == 1) {
         this.dataSource = new MatTableDataSource<TablaBlancesFacturables>(changes.data.currentValue.data);
+
+        console.log('hijo -> ',this.tablaFacturas);
+        
       }else{
         this.dataSource = new MatTableDataSource<TablaBlancesNoFacturables>(changes.data.currentValue.data);
       }
@@ -91,7 +96,10 @@ export class TablaClienteBalancesComponent implements OnInit {
     let dialogRef = this.MatDialog.open(PopupGenerarFacturaComponent,
       {
         width: '600px',
-        data: this.idcliente
+        data: {
+          'datosCliente': this.datosClientes,
+          'tablaFacturacion': this.tablaFacturas
+        }
       });
 
     dialogRef.afterClosed().subscribe(

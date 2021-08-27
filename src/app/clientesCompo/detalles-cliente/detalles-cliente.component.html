@@ -160,7 +160,13 @@
                   </mat-expansion-panel-header>
                   <mat-tab-group>
                     <mat-tab label="Pagos"> 
-                      <app-tabla-cliente-balances [data]='balancePagosTabla' [datosClientes]="datosClientes" (exitoAlCargarPago)="recargarDatos($event)"></app-tabla-cliente-balances>
+                      <app-tabla-cliente-balances 
+                        [data]='balancePagosTabla' 
+                        [datosClientes]="datosClientes" 
+                        [tablaFacturas]="facturacion" 
+                        (exitoAlCargarPago)="recargarDatos($event)"
+                      >
+                      </app-tabla-cliente-balances>
                     </mat-tab>
                     <mat-tab label="Exoneraciones">
                       <app-tabla-cliente-balance-exoneraciones [data]='balancePagosTablaExoneraciones' [clienteSerie]="datosClientes"></app-tabla-cliente-balance-exoneraciones>

@@ -18,16 +18,18 @@
         <input type="date" matInput [(ngModel)]="fechaPago">
     </mat-form-field>
 
-    <!-- <mat-form-field appearance="fill">
-        <mat-label>Fecha *</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="fechaPago">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field> -->
-
     <mat-form-field class="col-md-6">
         <mat-label>Monto *</mat-label>
         <input matInput type='text' mask="separator.2" thousandSeparator="." [(ngModel)]="MontoPago">
+    </mat-form-field>
+
+    <mat-form-field class="col-md-12" *ngIf="clienteSerie == 1">
+        <mat-label>Factura</mat-label>
+        <mat-select [(ngModel)]="referenciaPago">
+            <ng-container *ngFor="let f of tablaFacturacion">
+                <mat-option  *ngIf="f['fac_status'] == 2" [value]="f['id']">Fact: #{{ f['id'] }} | fecha: {{f['created_at'] | date: 'd/M/Y'}} -> {{ f['monto'] | number: '2.2'}} {{f['denominacion']}}.</mat-option>
+            </ng-container>
+        </mat-select>
     </mat-form-field>
 
     <div class="alert alert-info col-md-12" role="alert"

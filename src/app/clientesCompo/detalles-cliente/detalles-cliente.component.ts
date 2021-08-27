@@ -4,7 +4,6 @@ import { ClientesService } from 'src/app/_servicios/clientes.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { NotaCreditoService } from 'src/app/_servicios/nota-credito.service';
 
@@ -145,7 +144,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloServicios() {
     this._clientes.obtenerServiciosClientes2(this.idcliente).subscribe(
       (res: any) => {
-        // console.log('api Servicios -> ', res);
         this.servicios = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
         this.numServicios = res['cuerpo'].length;
         this.expandedServicios = true;
@@ -159,7 +157,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloHistorial() {
     this._clientes.obtenerHistorialClientes(this.idcliente).subscribe(
       (res: any) => {
-        // console.log('api historia -> ', res);
         this.historial = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
         this.expandedHistorial = true;
         this.obtenerSolobalancesYexoneraciones();
@@ -172,8 +169,9 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloFacturaciones() {
     this._clientes.obtenerFacturacionesClientes(this.idcliente).subscribe(
       (res: any) => {
-        // console.log('api facturaciones -> ', res);
         this.facturacion = res['cuerpo']; //cuerpo de la respesta http que es el array
+        console.log(this.facturacion);
+        
         this.obtenerSoloNotasCreditos();
       }, (err: any) => {
         console.log(err);
@@ -184,7 +182,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSoloNotasCreditos() {
     this._notaCredito.traerNotasDeCredito(this.idcliente).subscribe(
       (res: any) => {
-        // console.log('api Notas -> ', res);
         this.notasCreditos = res;
         this.obtenerSolobalancesYexoneraciones();
       }, (err: any) => {
@@ -196,13 +193,14 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
   obtenerSolobalancesYexoneraciones() {
     this._clientes.obtenerBancesYexoneracionesClientes(this.idcliente, this.datosClientes['social']).subscribe(
       (res: any) => {
-        // console.log('api balances - exoneraciones -> ', res);
         this.balance_in = res['balance_in'];
         this.balance = res['balance'];
         this.exoneraciones = res['exoneraciones'];
         this.exoneraciones_in = res['exoneraciones_in'];
 
         this.facturacion = res['facturacion'];
+        console.log(this.facturacion);
+        
 
         if (this.datosClientes['serie'] == 1) {
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance']);
@@ -212,7 +210,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
           this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones_in']);
         }
 
-        // this.obtener_totales_para_cartas();
         // ASIGNAMOS LOS DATOS DEL API
         this.denominacion_html = res['denominacion'];
         this.status_balance_html1 = res['status_balance_html1'];
@@ -363,12 +360,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
       //status balance 2
       this.status_balance_html2 = this.balac_in;
     }
-
-    // console.log('facturado ->', this.facturado);
-    // console.log('pagado ->', this.pagado);
-    // console.log('facturado In ->', this.facturadoin);
-    // console.log('pagado In->', this.pagadoin);
-    // console.log('balc in ->', this.balac_in);
   } //fin funcion
 
 
@@ -379,16 +370,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
       this.expandedBalances = false;
 
       this.obtenerDatosClientes(); //Disparamos Actualizacion de Datos!
-      // this._clientes.obtenerServiciosClientes2(this.idcliente).subscribe(
-      //   (res: any) => {
-      //     this.servicios = new MatTableDataSource<any>(res['cuerpo']); //cuerpo de la respesta http que es el array
-      //     this.numServicios = res['cuerpo'].length;
-      //     this.expandedServicios = true;
-      //     this.loading = false;
-      //   }, (err: any) => {
-      //     console.log(err);
-      //   }
-      // );
     }
   }
 
