@@ -97,10 +97,30 @@ export class PopupGenerarFacturaComponent implements OnInit {
 
           //REGISTRAR PAGO
           if (this.clienteSerie == 1) {
-            alert('cleinte facturable!');
+            //REGISTRAR PAGO A CLIENTE NO FACTURABLE
+            this.groupForm = this.formBuilder.group({
+              bal_tip:  this.metodoDePago ,
+              bal_monto:  this.MontoPago ,
+              created_at:  fechaAux ,
+              bal_comment:  this.referenciaPago ,
+              bal_cli:  Number(this.idcliente) ,
+            });
+            this._facturacion.registrarPagoFacturable(this.groupForm.value).subscribe(
+              (res: any) => {
+                console.log(res);
+                if (res == 200) {
+                  this.respuestaComponente = true;
+                  this.ngOnDestroy();
+                }
+              }, (err: any) => {
+                console.log(err);
+              }, () => {
+                this.loadingForm = false;
+              }
+            );
           }else{
             //REGISTRAR PAGO A CLIENTE NO FACTURABLE
-            this._facturacion.registrarPago(
+            this._facturacion.registrarPagoNoFacturable(
               this.metodoDePago, this.referenciaPago, fechaAux, montoFinal, this.MontoPago, this.idusuario, Number(this.idcliente)
             ).subscribe(
               (res: any) => {

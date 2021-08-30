@@ -56,7 +56,11 @@ export class FacturacionService {
     });
   }
 
-  registrarPago(
+  registrarPagoFacturable(datos: any):Observable<any>{
+    return this.http.post(this.loginS.API_URI+"pagoclient",datos)
+  }
+
+  registrarPagoNoFacturable(
       metodo:any, referencia:string, fecha:any, conversion:number, monto:number,usuario:number,cliente:number
     ):Observable<any>{
     return this.http.post(this.loginS.API_URI+"registrarPago",{metodo,referencia,fecha,conversion,monto,usuario,cliente})
