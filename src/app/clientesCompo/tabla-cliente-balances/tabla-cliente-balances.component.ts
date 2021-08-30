@@ -80,9 +80,6 @@ export class TablaClienteBalancesComponent implements OnInit {
     if (changes.data) {
       if (this.facturable == 1) {
         this.dataSource = new MatTableDataSource<TablaBlancesFacturables>(changes.data.currentValue.data);
-
-        console.log('hijo -> ',this.tablaFacturas);
-        
       }else{
         this.dataSource = new MatTableDataSource<TablaBlancesNoFacturables>(changes.data.currentValue.data);
       }

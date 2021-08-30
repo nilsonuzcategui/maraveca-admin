@@ -170,8 +170,6 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
     this._clientes.obtenerFacturacionesClientes(this.idcliente).subscribe(
       (res: any) => {
         this.facturacion = res['cuerpo']; //cuerpo de la respesta http que es el array
-        console.log(this.facturacion);
-        
         this.obtenerSoloNotasCreditos();
       }, (err: any) => {
         console.log(err);
@@ -197,11 +195,7 @@ export class DetallesClienteComponent implements OnInit, OnDestroy {
         this.balance = res['balance'];
         this.exoneraciones = res['exoneraciones'];
         this.exoneraciones_in = res['exoneraciones_in'];
-
         this.facturacion = res['facturacion'];
-        console.log(this.facturacion);
-        
-
         if (this.datosClientes['serie'] == 1) {
           this.balancePagosTabla = new MatTableDataSource<any>(res['balance']);
           this.balancePagosTablaExoneraciones = new MatTableDataSource<any>(res['exoneraciones']);
